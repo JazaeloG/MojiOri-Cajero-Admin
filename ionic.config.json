@@ -1,0 +1,7 @@
+{
+  "name": "MojiOri-Cajero",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
