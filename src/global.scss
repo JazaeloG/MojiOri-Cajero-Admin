@@ -35,3 +35,63 @@
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
 @import "@ionic/angular/css/palettes/dark.system.css";
+
+.custom-button-1 {
+    --background: linear-gradient(180deg, #FF9B39 0%, #FDB300 100%);
+    --color: #ffffff;
+    --border-radius: 15px;
+    --border: 1px solid #F67704;
+    border: none;
+    margin-top: 20px;
+    border-radius: 15px;
+    background-color: linear-gradient(180deg, #FF9B39 0%, #FDB300 100%);
+  }
+  .custom-button-3 {
+    --background: linear-gradient(180deg, #FF9B39 0%, #FDB300 100%);
+    --color: #ffffff;
+    --border-radius: 10px;
+    border: none;
+    font-size: large;
+    height: 5rem;
+    width: 8rem;
+    padding: 3px;
+    background-color: linear-gradient(180deg, #FF9B39 0%, #FDB300 100%);
+  }
+  .custom-button-2 {
+    --background: #ffffff;
+    --color: #F67704;
+    --border-radius: 15px;
+    border: 1px solid #f77c09;
+    margin-top: 20px;
+    border-radius: 15px;
+  }
+  
+  ion-content {
+    --background: linear-gradient(180deg, #f7f6f6 40%, #ebebeb 95%);
+  }
+  
+  .custom-date {
+   color: #F67704;
+   border-radius: 15px;
+
+  }
+  ion-datetime::part(calendar-day today) {
+    color: #883a13;
+  }
+  ion-datetime.md::part(calendar-day active),
+  ion-datetime.md::part(calendar-day active):focus {
+    background-color: #FFCC05;
+    border-color: #FFCC05;
+    color: #fff;
+    
+  }
+  ion-datetime.md::part(calendar-day today) {
+    border-color: #883a13;
+  }
+  .alert-custom {
+    color: #f77c09;
+  }
+  .error-custom{
+    color: #a39991;
+    text-align: center;
+  }
