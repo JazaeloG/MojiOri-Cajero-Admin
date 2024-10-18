@@ -18,7 +18,7 @@ export class LoginService {
     return this.http.post<any>(this.loginURL, body).pipe(
       tap(response => {
         if (response.token) {
-          localStorage.setItem('token', response.token);
+          localStorage.setItem('authToken', response.token);
         }
       }),
       map(response => response.token ? { success: true, token: response.token } : { success: false, error: 'Credenciales incorrectas' }),
@@ -30,7 +30,7 @@ export class LoginService {
   }
 
   getProfile(): Observable<any> {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('authToken');
     if (!token) {
       return of(null);
     }
@@ -52,6 +52,6 @@ export class LoginService {
   }
 
   logout(): void {
-    localStorage.removeItem('token');
+    localStorage.removeItem('authToken');
   }
 }

@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { VentasPageRoutingModule } from './ventas-routing.module';
 
 import { VentasPage } from './ventas.page';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    VentasPageRoutingModule
+    VentasPageRoutingModule,
+    ZXingScannerModule
   ],
   declarations: [VentasPage]
 })

@@ -8,7 +8,7 @@
     </div>
 
   <div class="form">
-    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" action="/home" name="loginForm" id="loginForm">
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" action="/ventas" name="loginForm" id="loginForm">
       <ion-item>
         <ion-input label="Teléfono" color="medium" label-placement="floating"  type="tel" formControlName="cuenta_Telefono" length="10" id="cuenta_Telefono" required></ion-input>
 
@@ -29,7 +29,6 @@
       </ion-text>
   
       <ion-button expand="block" class="custom-button-1" type="submit" id="btn" name="btn">
-      <!-- <ion-button expand="block" class="custom-button-1" href="/home"> -->
         INICIO DE SESIÓN
       </ion-button>
     </form>
