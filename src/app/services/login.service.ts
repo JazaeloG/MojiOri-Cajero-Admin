@@ -18,13 +18,13 @@ export class LoginService {
     return this.http.post<any>(this.loginURL, body).pipe(
       tap(response => {
         if (response.token) {
-          
           localStorage.setItem('token', response.token);
         }
       }),
+      map(response => response.token ? { success: true, token: response.token } : { success: false, error: 'Credenciales incorrectas' }),
       catchError(error => {
         console.error('Error en el login', error);
-        return of(null);
+        return of({ success: false, error: 'Error en el servidor' });
       })
     );
   }
@@ -41,13 +41,8 @@ export class LoginService {
 
     return this.http.get<any>(this.profileURL, { headers }).pipe(
       map(profile => {
-        const rolPermitido = ['ADMINISTRADOR', 'CAJERO'];
-        if (rolPermitido.includes(profile.cuenta_Rol)) {
-          return profile;
-        } else {
-          console.error('Rol no permitido');
-          return null;
-        }
+        const rolesPermitidos = ['ADMINISTRADOR', 'CAJERO'];
+        return rolesPermitidos.includes(profile.cuenta_Rol) ? profile : null;
       }),
       catchError(error => {
         console.error('Error al obtener el perfil', error);
