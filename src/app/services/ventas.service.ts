@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
@@ -30,6 +30,10 @@ export class VentasService {
   }
 
   crearCuentaGenerica(cuenta: any): Observable<any> {
-    return this.http.post<any>(environment.baseApiURL + 'registro', cuenta);
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json'
+    });
+    console.log(cuenta);
+    return this.http.post<any>(environment.baseApiURL+'registro', cuenta, { headers });
   }
 }

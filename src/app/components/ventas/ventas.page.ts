@@ -1,7 +1,7 @@
-import { Component, HostListener, OnInit } from '@angular/core';
-import { VentasService } from 'src/app/services/ventas.service';
-import { BarcodeFormat } from '@zxing/library';
-import { AlertController } from '@ionic/angular';
+import { Component, HostListener, OnInit } from "@angular/core";
+import { VentasService } from "src/app/services/ventas.service";
+import { BarcodeFormat } from "@zxing/library";
+import { AlertController } from "@ionic/angular";
 
 interface Product {
   id: number;
@@ -15,9 +15,9 @@ interface OrderItem extends Product {
 }
 
 @Component({
-  selector: 'app-ventas',
-  templateUrl: './ventas.page.html',
-  styleUrls: ['./ventas.page.scss'],
+  selector: "app-ventas",
+  templateUrl: "./ventas.page.html",
+  styleUrls: ["./ventas.page.scss"],
 })
 export class VentasPage implements OnInit {
   currentDevice: MediaDeviceInfo | null = null;
@@ -25,7 +25,7 @@ export class VentasPage implements OnInit {
   public BarcodeFormat = BarcodeFormat; 
   isVertical = window.innerHeight > window.innerWidth;
   isScanning = false;  
-  inputNumber: string = '';
+  inputNumber: string = "";
   products: Product[] =[];
   orderItems: OrderItem[] = [];
   totalAmount = 0;
@@ -49,12 +49,12 @@ export class VentasPage implements OnInit {
         }));
       },
       (error) => {
-        console.error('Error al obtener productos:', error);
+        console.error("Error al obtener productos:", error);
       }
     );
   }
 
-  @HostListener('window:resize')
+  @HostListener("window:resize")
   onResize() {
     this.isVertical = window.innerHeight > window.innerWidth;
   }
@@ -64,20 +64,20 @@ export class VentasPage implements OnInit {
   }
 
   onScanSuccess(scanResult: string) {
-    console.log('QR escaneado:', scanResult);
+    console.log("QR escaneado:", scanResult);
     this.ventasService.descifrarCodigo(scanResult).subscribe(
       (response: any) => {
-        console.log('Respuesta del servidor:', response);
+        console.log("Respuesta del servidor:", response);
         if (response && response.numeroDesencriptado) {
           this.inputNumber = response.numeroDesencriptado; 
           this.isScanning = false;
         } else {
-          alert('QR no válido o no se pudo procesar.');
+          alert("QR no válido o no se pudo procesar.");
         }
       },
       (error) => {
-        alert('Error al procesar el QR.');
-        console.error('Error al descifrar QR:', error);
+        alert("Error al procesar el QR.");
+        console.error("Error al descifrar QR:", error);
       }
     );
   }
@@ -126,7 +126,26 @@ export class VentasPage implements OnInit {
     this.totalAmount = this.orderItems.reduce((total, item) => total + item.price * item.quantity, 0);
   }
 
+  async showAlert(header: string, message: string) {
+    const alert = await this.alertController.create({
+      header,
+      message,
+      buttons: ['OK']
+    });
+    await alert.present();
+  }
+
   placeOrder() {
+    if (this.inputNumber.length !== 10 || !/^\d{10}$/.test(this.inputNumber)) {
+      this.showAlert("Número inválido", "El número de teléfono debe tener 10 dígitos.");
+      return; 
+    }
+  
+    if (this.orderItems.length === 0) {
+      this.showAlert("Carrito vacío", "Debe agregar al menos un producto al carrito para realizar la venta.");
+      return;
+    }
+
     const venta = {
       numero_Telefono: this.inputNumber,
       venta_Monto_Total: this.totalAmount,
@@ -139,33 +158,50 @@ export class VentasPage implements OnInit {
   
     this.ventasService.realizarVenta(venta).subscribe(
       (response) => {
-        console.log('Venta realizada con éxito:', response);
+        console.log("Venta realizada con éxito:", response);
         this.orderItems = [];
         this.calculateTotal();
+
+        this.showVentaRealizadaAlert();
       },
       (error) => {
-        console.error('Error al realizar la venta:', error);
-        if (error.status === 500 && error.error.message.includes('número de teléfono proporcionado no existe')) {
+        console.error("Error al realizar la venta:", error);
+        if (error.status === 500 && error.error.message.includes("número de teléfono proporcionado no existe")) {
           this.showCreateAccountDialog();
         }
       }
     );
   }
 
+  async showVentaRealizadaAlert() {
+    const alert = await this.alertController.create({
+      header: "Éxito",
+      message: "Venta realizada",
+      buttons: [],
+      cssClass: 'venta-realizada-alert', 
+    });
+  
+    await alert.present();
+  
+    setTimeout(() => {
+      alert.dismiss();
+    }, 1000);
+  }
+  
+
   async showCreateAccountDialog() {
     const alert = await this.alertController.create({
-      header: 'Número no encontrado',
-      message: 'El número de teléfono no existe. ¿Desea crear una cuenta genérica o cancelar la venta?',
+      header: "Número no encontrado",
+      message: "El número de teléfono no existe. ¿Desea crear una cuenta genérica o cancelar la venta?",
       buttons: [
         {
-          text: 'Cancelar Venta',
-          role: 'cancel',
+          text: "Cancelar Venta",
+          role: "cancel",
           handler: () => {
-            console.log('Venta cancelada');
           }
         },
         {
-          text: 'Crear Cuenta Genérica',
+          text: "Crear Cuenta Genérica",
           handler: () => {
             this.crearCuentaGenerica();
           }
@@ -178,9 +214,9 @@ export class VentasPage implements OnInit {
 
   validateNumber() {
     if (this.inputNumber.length === 10) {
-      console.log('Número válido:', this.inputNumber);
+      console.log("Número válido:", this.inputNumber);
     } else {
-      console.log('Número inválido:', this.inputNumber);
+      console.log("Número inválido:", this.inputNumber);
     }
   }
 
@@ -189,34 +225,33 @@ export class VentasPage implements OnInit {
       usuario_Usuario: this.generarNicknameAleatorio(),
       usuario_FechaNacimiento: this.obtenerFechaActual(),
       cuenta_Telefono: this.inputNumber,
-      cuenta_Contrasena: this.generarContrasena(),
-      cuenta_Estado: 'PENDIENTE',
-      cuenta_Rol: 'USUARIO'
+      cuenta_Contrasena: this.generarContrasena()
     };
   
     this.ventasService.crearCuentaGenerica(cuentaGenerica).subscribe(
       (response) => {
-        console.log('Cuenta genérica creada:', response);
+        this.placeOrder();
+        console.log("Cuenta genérica creada:", response);
       },
       (error) => {
-        console.error('Error al crear la cuenta genérica:', error);
+        console.error("Error al crear la cuenta genérica:", error);
       }
     );
   }
 
   obtenerFechaActual(): string {
     const hoy = new Date();
-    const dia = String(hoy.getDate()).padStart(2, '0');
-    const mes = String(hoy.getMonth() + 1).padStart(2, '0'); 
+    const dia = String(hoy.getDate()).padStart(2, "0");
+    const mes = String(hoy.getMonth() + 1).padStart(2, "0"); 
     const anio = hoy.getFullYear();
   
-    return `${dia}/${mes}/${anio}`;
+    return `${anio}/${mes}/${dia}`;
   }
 
   generarContrasena(): string {
     const longitud = 8;
-    const caracteres = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    let contrasena = '';
+    const caracteres = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+    let contrasena = "";
     for (let i = 0; i < longitud; i++) {
       const indice = Math.floor(Math.random() * caracteres.length);
       contrasena += caracteres.charAt(indice);
@@ -225,8 +260,8 @@ export class VentasPage implements OnInit {
   }
 
   generarNicknameAleatorio(): string {
-    const palabras = ['Super', 'Estrella', 'Fenix', 'Guerrero', 'Ninja', 'Tornado', 'Explorador', 'Astro', 'Cometa', 'Rayo'];
-    const sufijos = ['Heroe', 'Misterio', 'Viajero', 'Fantasma', 'Titan', 'Guardia', 'Leyenda', 'Luchador'];
+    const palabras = ["Super", "Estrella", "Fenix", "Guerrero", "Ninja", "Tornado", "Explorador", "Astro", "Cometa", "Rayo"];
+    const sufijos = ["Heroe", "Misterio", "Viajero", "Fantasma", "Titan", "Guardia", "Leyenda", "Luchador"];
     const numeroAleatorio = Math.floor(1000 + Math.random() * 9000);
   
     const palabraAleatoria = palabras[Math.floor(Math.random() * palabras.length)];
