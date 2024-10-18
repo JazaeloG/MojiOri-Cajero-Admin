@@ -1,10 +1,11 @@
 <ion-content>
   <div class="form-container">
+    <img src="assets/svg/moji.svg" alt="SVG de Moji Ori" class="svg-container" />
+    
     <div class="header-container">
       <h2>Bienvenido</h2>
       <h1>MOJI ORI</h1>
     </div>
-  <img src="assets/svg/moji.svg" alt="SVG de Moji Ori" class="svg-container " />
 
   <div class="form">
     <form [formGroup]="loginForm" (ngSubmit)="onLogin()" action="/home" name="loginForm" id="loginForm">
@@ -34,16 +35,6 @@
     </form>
     
     <a href="recuperacion" class="recuperar">¿Olvidé la contraseña?</a>
-    
-    <div class="line-group">
-      <div class="line"></div>
-      <p>O</p>
-      <div class="line"></div>
     </div>
-  
-    <ion-button routerLink="/registro" expand="block" class="custom-button-2"
-      >CREAR CUENTA</ion-button>
-    </div>
-
   </div>
 </ion-content>
