@@ -4,9 +4,9 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { VentasPageRoutingModule } from './ventas-routing.module';
+import { CanjearCodigoPageRoutingModule } from './canjear-codigo-routing.module';
 
-import { VentasPage } from './ventas.page';
+import { CanjearCodigoPage } from './canjear-codigo.page';
 import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 @NgModule({
@@ -14,9 +14,9 @@ import { ZXingScannerModule } from '@zxing/ngx-scanner';
     CommonModule,
     FormsModule,
     IonicModule,
-    VentasPageRoutingModule,
+    CanjearCodigoPageRoutingModule,
     ZXingScannerModule
   ],
-  declarations: [VentasPage]
+  declarations: [CanjearCodigoPage]
 })
-export class VentasPageModule {}
+export class CanjearCodigoPageModule {}

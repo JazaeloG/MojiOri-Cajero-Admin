@@ -1,0 +1,55 @@
+<ion-content [fullscreen]="true" class="ion-padding" style="background-color: #f3e8ff;">
+  <div class="container">
+    <!-- Sección del escáner QR -->
+    <div class="qr-scanner">
+      <div class="scanner-box">
+        <p>ESCANEAR CÓDIGO PROMOCIONAL</p>
+        <!-- Área de escaneo -->
+        <div class="scanner-area">
+          <!-- Escáner QR cuando se activa -->
+          <div *ngIf="isScanning" class="qr-scanner-box">
+            <zxing-scanner
+              [formats]="[BarcodeFormat.QR_CODE]"
+              (scanSuccess)="onScanSuccess($event)"
+              [device]="currentDevice || undefined"
+              [enable]="scannerEnabled">
+            </zxing-scanner>
+          </div>
+        </div>
+
+        <!-- Botón para escanear QR -->
+        <ion-button (click)="scanQR()" expand="block" color="primary">
+          <ion-icon slot="start" name="qr-code-outline"></ion-icon>
+          Escanear QR
+        </ion-button>
+      </div>
+    </div>
+
+    <!-- Sección del resumen de la orden -->
+    <div class="order-summary">
+      <ion-card>
+        <ion-card-content>
+          <ion-grid>
+            <ion-row>
+              <ion-col><strong>Producto</strong></ion-col>
+              <ion-col><strong>Cantidad</strong></ion-col>
+            </ion-row>
+            <ion-row *ngFor="let item of orderItems">
+              <ion-col>{{ item.nombre }}</ion-col>
+              <ion-col>{{ item.cantidad }}</ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col><strong>Total de puntos:</strong></ion-col>
+              <ion-col></ion-col>
+              <ion-col>{{ totalPoints }}</ion-col>
+            </ion-row>
+          </ion-grid>
+
+          <ion-button expand="block" color="warning" (click)="redeemPoints()">
+            Canjear puntos
+          </ion-button>
+        </ion-card-content>
+      </ion-card>
+    </div>
+  </div>
+</ion-content>

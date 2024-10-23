@@ -8,7 +8,7 @@
     </div>
 
   <div class="form">
-    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" action="/home" name="loginForm" id="loginForm">
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" action="/ventas" name="loginForm" id="loginForm">
       <ion-item>
         <ion-input label="Teléfono" color="medium" label-placement="floating"  type="tel" formControlName="cuenta_Telefono" length="10" id="cuenta_Telefono" required></ion-input>
 
@@ -19,17 +19,8 @@
     
         </ion-input>
       </ion-item>
-
-      <ion-text color="danger" *ngIf="loginForm.get('cuenta_Contrasena')?.invalid && loginForm.get('cuenta_Contrasena')?.touched">
-        <p>La contraseña debe tener al menos 6 caracteres.</p>
-      </ion-text>
-
-      <ion-text color="danger" *ngIf="errorMessage">
-        <p>{{ errorMessage }}</p>
-      </ion-text>
   
       <ion-button expand="block" class="custom-button-1" type="submit" id="btn" name="btn">
-      <!-- <ion-button expand="block" class="custom-button-1" href="/home"> -->
         INICIO DE SESIÓN
       </ion-button>
     </form>
