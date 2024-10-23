@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit } from "@angular/core";
 import { VentasService } from "src/app/services/ventas.service";
 import { BarcodeFormat } from "@zxing/library";
-import { AlertController } from "@ionic/angular";
+import { AlertController, ToastController } from "@ionic/angular";
 
 interface Product {
   id: number;
@@ -31,7 +31,7 @@ export class VentasPage implements OnInit {
   totalAmount = 0;
   
 
-  constructor(private ventasService: VentasService, private alertController: AlertController,) { }
+  constructor(private ventasService: VentasService, private alertController: AlertController,private toastController: ToastController) { }
 
   ngOnInit() {
     this.loadProducts();
@@ -64,20 +64,18 @@ export class VentasPage implements OnInit {
   }
 
   onScanSuccess(scanResult: string) {
-    console.log("QR escaneado:", scanResult);
     this.ventasService.descifrarCodigo(scanResult).subscribe(
       (response: any) => {
-        console.log("Respuesta del servidor:", response);
         if (response && response.numeroDesencriptado) {
           this.inputNumber = response.numeroDesencriptado; 
           this.isScanning = false;
+          this.presentToast("Código QR descifrado correctamente", "success");
         } else {
-          alert("QR no válido o no se pudo procesar.");
+          this.presentToast("Error al descifrar QR. Intentelo nuevamente", "danger");
         }
       },
       (error) => {
-        alert("Error al procesar el QR.");
-        console.error("Error al descifrar QR:", error);
+        this.presentToast("Error al descifrar QR. Intentelo nuevamente", "danger");
       }
     );
   }
@@ -126,23 +124,25 @@ export class VentasPage implements OnInit {
     this.totalAmount = this.orderItems.reduce((total, item) => total + item.price * item.quantity, 0);
   }
 
-  async showAlert(header: string, message: string) {
-    const alert = await this.alertController.create({
-      header,
-      message,
-      buttons: ['OK']
+  async presentToast(message: string, color: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 3000,
+      color: color, 
+      position: 'top', 
+      cssClass: 'custom-toast'
     });
-    await alert.present();
+    toast.present();
   }
 
   placeOrder() {
     if (this.inputNumber.length !== 10 || !/^\d{10}$/.test(this.inputNumber)) {
-      this.showAlert("Número inválido", "El número de teléfono debe tener 10 dígitos.");
+      this.presentToast("Número inválido\nEl número de teléfono debe tener 10 dígitos.", "danger");
       return; 
     }
   
     if (this.orderItems.length === 0) {
-      this.showAlert("Carrito vacío", "Debe agregar al menos un producto al carrito para realizar la venta.");
+      this.presentToast("Carrito vacío\nDebe agregar al menos un producto al carrito para realizar la venta.", "danger");
       return;
     }
 
@@ -158,10 +158,8 @@ export class VentasPage implements OnInit {
   
     this.ventasService.realizarVenta(venta).subscribe(
       (response) => {
-        console.log("Venta realizada con éxito:", response);
         this.orderItems = [];
         this.calculateTotal();
-
         this.showVentaRealizadaAlert();
       },
       (error) => {
@@ -212,14 +210,6 @@ export class VentasPage implements OnInit {
     await alert.present();
   }
 
-  validateNumber() {
-    if (this.inputNumber.length === 10) {
-      console.log("Número válido:", this.inputNumber);
-    } else {
-      console.log("Número inválido:", this.inputNumber);
-    }
-  }
-
   crearCuentaGenerica() {
     const cuentaGenerica = {
       usuario_Usuario: this.generarNicknameAleatorio(),
@@ -231,10 +221,9 @@ export class VentasPage implements OnInit {
     this.ventasService.crearCuentaGenerica(cuentaGenerica).subscribe(
       (response) => {
         this.placeOrder();
-        console.log("Cuenta genérica creada:", response);
       },
       (error) => {
-        console.error("Error al crear la cuenta genérica:", error);
+        this.presentToast("Error al crear la cuenta genérica", "danger");
       }
     );
   }

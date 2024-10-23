@@ -24,7 +24,7 @@ export class LoginService {
       map(response => response.token ? { success: true, token: response.token } : { success: false, error: 'Credenciales incorrectas' }),
       catchError(error => {
         console.error('Error en el login', error);
-        return of({ success: false, error: 'Error en el servidor' });
+        return of({ success: false, error: "Credenciales Invalidas. Verifique e intente nuevamente." });
       })
     );
   }

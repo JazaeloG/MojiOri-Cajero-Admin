@@ -4,6 +4,7 @@ import { LoginService } from 'src/app/services/login.service';
 import { Router } from '@angular/router';
 import { switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
+import { ToastController } from '@ionic/angular';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,8 @@ export class LoginPage implements OnInit {
   constructor(
     private fb: FormBuilder,
     private loginService: LoginService,
-    private router: Router
+    private router: Router,
+    private toastController: ToastController
   ) { }
 
   ngOnInit() {
@@ -33,35 +35,49 @@ export class LoginPage implements OnInit {
     });
   }
 
-  onLogin() {
+  async presentToast(message: string) {
+    const toast = await this.toastController.create({
+      message: message,
+      duration: 3000,
+      color: 'danger', 
+      position: 'top', 
+      cssClass: 'custom-toast'
+    });
+    toast.present();
+  }
+
+  async onLogin() {
     if (this.loginForm.invalid) {
+      if (this.loginForm.get('cuenta_Telefono')?.errors?.['required']) {
+        await this.presentToast('El teléfono es requerido.');
+      } else if (this.loginForm.get('cuenta_Telefono')?.errors?.['pattern']) {
+        await this.presentToast('El teléfono debe tener 10 dígitos.');
+      }
+      if (this.loginForm.get('cuenta_Contrasena')?.errors?.['required']) {
+        await this.presentToast('La contraseña es requerida.');
+      } else if (this.loginForm.get('cuenta_Contrasena')?.errors?.['minlength']) {
+        await this.presentToast('La contraseña debe tener al menos 6 caracteres.');
+      }
       return;
     }
 
     const { cuenta_Telefono, cuenta_Contrasena } = this.loginForm.value;
 
-    this.loginService.login(cuenta_Telefono, cuenta_Contrasena).subscribe(response => {
+    this.loginService.login(cuenta_Telefono, cuenta_Contrasena).subscribe(async response => {
       if (response.success) {
-        this.loginService.getProfile().subscribe(profile => {
+        this.loginService.getProfile().subscribe(async profile => {
           if (profile) {
-            if (profile.cuenta_Rol === 'CAJERO') {
-              this.router.navigate(['/ventas']);
-            } else if (profile.cuenta_Rol === 'ADMINISTRADOR') {
-              this.router.navigate(['/ventas']);
-            } else if (profile.cuenta_Rol === 'USUARIO') {
-              this.errorMessage = 'No tienes permisos para acceder a este portal.';
-              this.loginService.logout();
-            }
+            this.router.navigate(['/ventas']);
           } else {
-            this.errorMessage = 'No se pudo verificar el perfil. Inténtalo de nuevo.';
+            await this.presentToast('No se pudo verificar el perfil. Inténtalo de nuevo.');
           }
         });
       } else {
-        this.errorMessage = response.error || 'Error al iniciar sesión. Verifica tus credenciales.';
+        await this.presentToast(response.error || 'Error al iniciar sesión. Verifica tus credenciales.');
       }
-    }, error => {
+    }, async error => {
       console.error('Error en el proceso de login', error);
-      this.errorMessage = 'Error en el servidor. Intenta nuevamente más tarde.';
+      await this.presentToast('Error en el servidor. Intenta nuevamente más tarde.');
     });
   }
 }

@@ -104,11 +104,16 @@
   display: flex;
   flex-direction: column;
   height: 100%;
+  overflow-y: auto;
 
   @media (min-width: 768px) {
     flex: 1;
     border-top: none;
     border-left: 2px solid #ff9800;
+  }
+
+  @media (max-width: 720px) {
+    max-height: 200px;
   }
 
   h2 {

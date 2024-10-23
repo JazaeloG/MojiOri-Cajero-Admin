@@ -7,13 +7,15 @@ import { IonicModule } from '@ionic/angular';
 import { CanjearCodigoPageRoutingModule } from './canjear-codigo-routing.module';
 
 import { CanjearCodigoPage } from './canjear-codigo.page';
+import { ZXingScannerModule } from '@zxing/ngx-scanner';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    CanjearCodigoPageRoutingModule
+    CanjearCodigoPageRoutingModule,
+    ZXingScannerModule
   ],
   declarations: [CanjearCodigoPage]
 })

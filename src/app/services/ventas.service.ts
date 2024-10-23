@@ -17,6 +17,8 @@ export class VentasService {
 
   constructor(private http: HttpClient) { }
 
+  
+
   descifrarCodigo(qrCode: string): Observable<any> {
     return this.http.post<any>(environment.baseApiURL+'qr-code/decifrar', { data: qrCode });
   }

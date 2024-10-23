@@ -115,3 +115,12 @@ ion-content {
     }
   }
   
+
+  .custom-toast {
+    --background: #ff5c5c; 
+    --color: #fff;
+    border-radius: 8px; 
+    padding: 10px; 
+    text-align: center; 
+  }
+  
