@@ -11,7 +11,7 @@
             [(ngModel)]="inputNumber"
             class="custom-input"
           ></ion-input>
-          <ion-button (click)="scanQR()" class="input-btn">
+          <ion-button (click)="scanQR()" class="custom-button-1">
             <ion-icon name="qr-code-outline"></ion-icon>
             Escanear QR
           </ion-button>
@@ -73,7 +73,7 @@
         <p>{{ totalAmount | currency:'USD':'symbol':'1.2-2' }}</p>
       </div>
       
-      <ion-button expand="block" (click)="placeOrder()">Realizar Venta</ion-button>
+      <ion-button class="custom-button-1" expand="block" (click)="placeOrder()">Realizar Venta</ion-button>
     </div>
   </div>
 </ion-content>

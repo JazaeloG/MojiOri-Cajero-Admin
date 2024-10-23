@@ -9,6 +9,7 @@
           <!-- Escáner QR cuando se activa -->
           <div *ngIf="isScanning" class="qr-scanner-box">
             <zxing-scanner
+
               [formats]="[BarcodeFormat.QR_CODE]"
               (scanSuccess)="onScanSuccess($event)"
               [device]="currentDevice || undefined"
@@ -18,7 +19,7 @@
         </div>
 
         <!-- Botón para escanear QR -->
-        <ion-button (click)="scanQR()" expand="block" color="primary">
+        <ion-button class="custom-button-1" (click)="scanQR()" expand="block" >
           <ion-icon slot="start" name="qr-code-outline"></ion-icon>
           Escanear QR
         </ion-button>
@@ -26,7 +27,7 @@
     </div>
 
     <!-- Sección del resumen de la orden -->
-    <div class="order-summary">
+    <div class="order-summary" >
       <ion-card>
         <ion-card-content>
           <ion-grid>
@@ -45,7 +46,7 @@
             </ion-row>
           </ion-grid>
 
-          <ion-button expand="block" color="warning" (click)="redeemPoints()">
+          <ion-button class="custom-button-2" expand="block" (click)="canjearOrden()">
             Canjear puntos
           </ion-button>
         </ion-card-content>

@@ -17,4 +17,8 @@ export class CanjearCodigoService {
   obtenerOrden(ordenId: number): Observable<any> {
     return this.http.get<any>(environment.baseApiURL+'orden/'+ordenId);
   }
+
+  despacharOrden(ordenId: number): Observable<any>{
+    return this.http.post<any>(environment.baseApiURL+'orden/despacharOrden/'+ordenId, {});
+  }
 }

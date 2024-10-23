@@ -21,6 +21,7 @@ export class CanjearCodigoPage implements OnInit {
   isScanning = false;
   scannerEnabled = true;
   currentDevice: any;
+  ordenId: number| null = null;
   public BarcodeFormat = BarcodeFormat; 
 
   constructor(
@@ -50,9 +51,13 @@ export class CanjearCodigoPage implements OnInit {
     this.canjearService.descifrarCodigo(scanResult).subscribe(
       (response: any) => {
         if (response && response.ordenId) {
-          const ordenId = response.ordenId;
+          this.ordenId = response.ordenId;
           this.isScanning = false;
-          this.obtenerOrdenPorId(ordenId);
+          if (this.ordenId !== null) {
+            this.obtenerOrdenPorId(this.ordenId);
+          } else {
+            this.presentToast("Orden ID no válido.", "danger");
+          }
           this.presentToast("QR procesado correctamente.", "success");
         } else {
           this.presentToast("Codigo Invalido.", "danger");
@@ -92,7 +97,45 @@ export class CanjearCodigoPage implements OnInit {
     }));
   }
 
-  redeemPoints() {
-    console.log('Canjeando puntos...');
+  canjearOrden() {
+    if (this.orderItems.length === 0) {
+      this.presentToast('No hay productos en la orden para canjear.', 'warning');
+      return;
+    }
+  
+    if (!this.totalPoints || this.totalPoints <= 0) {
+      this.presentToast('La orden no tiene puntos válidos para canjear.', 'danger');
+      return;
+    }
+  
+    this.canjearService.obtenerOrden(this.ordenId!).subscribe(
+      (orden: any) => {
+        if (orden.orden_Estado === 'DISPONIBLE' && this.ordenId !== null) { 
+          this.despacharOrden(this.ordenId);
+        } else {
+          this.orderItems = [];
+          this.totalPoints = 0;
+          this.presentToast('La orden no está disponible para canjear.', 'danger');
+        }
+      },
+      (error) => {
+        this.presentToast('Error al verificar el estado de la orden.', 'danger');
+        console.error('Error al verificar el estado de la orden:', error);
+      }
+    );
+  }
+  
+  despacharOrden(ordenId: number) {
+    this.canjearService.despacharOrden(ordenId).subscribe(
+      (response: any) => {
+        this.presentToast('Orden canjeada con éxito.', 'success');
+        this.orderItems = [];
+        this.totalPoints = 0;
+      },
+      (error) => {
+        this.presentToast('Error al despachar la orden.', 'danger');
+        console.error('Error al despachar la orden:', error);
+      }
+    );
   }
 }
