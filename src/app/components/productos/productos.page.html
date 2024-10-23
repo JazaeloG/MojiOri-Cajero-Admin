@@ -1,0 +1,32 @@
+
+<ion-content>
+  <div class="container">
+    <div class="header-content">
+    <h1>Productos</h1>
+    <ion-button class="custom-button-1" routerLink="/agregar-producto">Añadir Producto</ion-button>
+  </div>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6" size-md="4" *ngFor="let product of productos">
+        <div class="product-card">
+          <img  [src]="product.img" [alt]="product.nombre" class="product-image" />
+          <div class="product-info">
+            <div class="product-text">
+              <h3>{{product.nombre}}</h3>
+              <p>${{product.precio}}</p>
+            </div>
+          <ion-button fill="clear" class="edit-button" [routerLink]="['/editar-producto', product.id]"  color="dark">
+            <ion-icon name="create-outline"></ion-icon> 
+          </ion-button>
+        </div>
+        </div>
+      </ion-col>
+
+      
+
+    </ion-row>
+  </ion-grid>
+  </div>
+  
+
+</ion-content>
