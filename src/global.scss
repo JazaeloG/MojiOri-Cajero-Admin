@@ -34,7 +34,7 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import "@ionic/angular/css/palettes/dark.system.css";
+/*@import "@ionic/angular/css/palettes/dark.system.css";*/
 
 .custom-button-1 {
     --background: linear-gradient(180deg, #FF9B39 0%, #FDB300 100%);
@@ -55,7 +55,6 @@
     height: 5rem;
     width: 8rem;
     padding: 3px;
-    background-color: linear-gradient(180deg, #FF9B39 0%, #FDB300 100%);
   }
   .custom-button-2 {
     --background: #ffffff;
@@ -64,6 +63,16 @@
     border: 1px solid #f77c09;
     margin-top: 20px;
     border-radius: 15px;
+  }
+  .custom-button-4 {
+    --background: linear-gradient(180deg, #ff3939 0%, #fd0000 100%);
+    --color: #ffffff;
+    --border-radius: 10px;
+    border: none;
+    font-size: medium;
+    height: 5rem;
+    width: 8rem;
+    padding: 3px;
   }
   
   ion-content {
@@ -94,4 +103,18 @@
   .error-custom{
     color: #a39991;
     text-align: center;
+  }
+  
+
+
+  
+  button.alert-button.alert-button-confirm {
+    background-color: #FDB300;
+    color: #ffffff;
+    border-radius: 8px;
+
+  }
+  button.alert-button.alert-button-cancel {
+    color: #FDB300;
+    border-radius: 8px;
   }

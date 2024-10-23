@@ -1,0 +1,90 @@
+.content-container {
+    padding: 2% 12%;
+
+    .title {
+      font-weight: 700;
+      font-size: 35px;
+      color: #F67704;
+      margin: 2rem 0;
+    }
+  
+    .dropdown-container {
+      --background: none;
+      width: 100%;
+      padding: 10px;
+    }
+  
+    .input-container {
+      width: 90%;
+      margin: 20px;
+    }
+  
+    .image-upload-container {
+      text-align: left;
+      margin-left: 16px;
+      padding: 10px;
+      display: flex;
+
+
+      img.product-image {
+        width: 160px;
+        height: 160px;
+        border-radius: 15px;
+        margin-bottom: 20px;
+        object-fit: contain;
+      }
+      
+      .custom-button-2 {
+        height: 40px;
+        margin-left: 20px;
+      }
+    }
+
+  }
+ .contenedor{
+    background-color: white;
+    border: 1px #F67704;
+    border-radius: 15px;
+    padding: 20px;
+ }
+
+ .file-input {
+    position: absolute;
+    left: -9999px; 
+  }
+ 
+  .select{
+    display: flex;
+    align-items: left;
+    justify-content: left;
+
+    ion-button{
+        height: 30px;
+        margin-right: 50px;
+    }
+  }
+
+  .guardar{
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-items: end;
+    ion-button{
+        width: 45%;
+        height: 50px;
+    }
+  }
+
+
+  @media (max-width: 768px) {
+    .content-container {
+      padding: 2% 5%;
+    }
+    .image-upload-container {
+        flex-direction: column; 
+        align-items: left;
+        margin-right: 2rem;
+      }
+      
+    
+  }

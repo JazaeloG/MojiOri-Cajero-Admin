@@ -1,0 +1,54 @@
+h1 {
+  color: #F67704;
+}
+
+.product-card {
+  margin: 10px;
+  padding: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+.product-image {
+  width: 150px;
+  height: 100px;
+  border-radius: 10px;
+  object-fit: contain;
+}
+
+
+.product-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center; 
+  width: 100%;
+  padding: 0; 
+}
+
+.product-text {
+  margin: 0; 
+  padding-left: 0; 
+}
+
+.product-info h3, .product-info p {
+  font-size: 14px;
+  font-weight: 300;
+  color: #000;
+  margin: 0; 
+}
+
+.edit-button {
+  --icon-size: 20px;
+}
+
+.header-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.container {
+  padding: 1rem 3rem;
+}
