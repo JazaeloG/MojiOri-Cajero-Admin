@@ -3,11 +3,11 @@ import { Platform } from '@ionic/angular';
 
 
 @Component({
-  selector: 'app-tabs',
-  templateUrl: './tabs.page.html',
-  styleUrls: ['./tabs.page.scss'],
+  selector: 'app-menu',
+  templateUrl: './menu.page.html',
+  styleUrls: ['./menu.page.scss'],
 })
-export class TabsPage implements OnInit {
+export class MenuPage implements OnInit {
 
 
   ngOnInit() {
