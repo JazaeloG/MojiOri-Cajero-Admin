@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminProductosService } from 'src/app/services/admin-productos.service';
 import { AlertController } from '@ionic/angular';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-agregar-producto',
@@ -10,81 +12,84 @@ import { AlertController } from '@ionic/angular';
 export class AgregarProductoPage implements OnInit {
   categorias: any;
   file: any;
-  idProducto!: number;
-  producto: {
-    producto_Disponible: boolean;
-    producto_Nombre: string;
-    producto_Descripcion: string;
-    producto_Precio: number;
-    producto_PrecioPuntos: number;
-    id_Categoria: number,
-    imagenes: {
-      imagenProducto_Url: string;
-    }
-  } | undefined 
-  
+  productoForm!: FormGroup;
 
   constructor(
     private productosService: AdminProductosService,
     private alertController: AlertController,
+    private formBuilder: FormBuilder,
+    private router: Router
   ) {}
 
   ngOnInit() {
+    console.log('token', localStorage.getItem('authToken'));
     this.cargarCategorias();
+
+    this.productoForm = this.formBuilder.group({
+      producto_Nombre: ['', Validators.required],
+      producto_Descripcion: ['', Validators.required],
+      producto_Precio: [null, [Validators.required, Validators.min(0.01)]],
+      producto_PrecioPuntos: [null, [Validators.required, Validators.min(1)]],
+      id_Categoria: [null, Validators.required],
+      producto_Disponible: [null, Validators.required],
+      imagen: [null, Validators.required],
+    });
   }
 
-  guardarProducto() {
-    if (!this.producto) {
-      this.producto = {
-        producto_Disponible: false,
-        producto_Nombre: '',
-        producto_Descripcion: '',
-        producto_Precio: 0,
-        producto_PrecioPuntos: 0,
-        id_Categoria: 0, 
-        imagenes: {
-          imagenProducto_Url: ''
-        }
-      };
+   guardarProducto() {
+    if (this.productoForm.invalid) {
+      return; 
     }
-  
-    this.producto.producto_Nombre = (document.querySelector('ion-input[placeholder="Hojaldre"]') as HTMLInputElement).value;
-    this.producto.producto_Descripcion = (document.querySelector('ion-input[placeholder="Descripción"]') as HTMLInputElement).value;
-    this.producto.producto_Precio = parseFloat((document.querySelector('ion-input[placeholder="15.00"]') as HTMLInputElement).value);
-    this.producto.producto_PrecioPuntos = parseFloat((document.querySelector('ion-input[placeholder="200"]') as HTMLInputElement).value);
-    this.producto.id_Categoria = Number((document.querySelector('ion-select[placeholder="1"]') as HTMLSelectElement).value);
-    this.producto.producto_Disponible = (document.querySelector('ion-select[placeholder="si"]') as HTMLSelectElement).value === 'true';
+
+    const formData = new FormData();
+    formData.append('producto_Nombre', this.productoForm.value.producto_Nombre);
+    formData.append('producto_Descripcion', this.productoForm.value.producto_Descripcion);
+    formData.append('producto_Precio', this.productoForm.value.producto_Precio.toString());
+    formData.append('producto_PrecioPuntos', this.productoForm.value.producto_PrecioPuntos.toString());
+    formData.append('id_Categoria', this.productoForm.value.id_Categoria.toString());
+    formData.append('producto_Disponible', this.productoForm.value.producto_Disponible ? 'true' : 'false');
 
     if (this.file) {
-      // Aquí deberías subir el archivo a tu servidor y obtener la URL
-      // Por ejemplo:
-      // const imagenUrl = await this.uploadFile(this.file); // método para subir
-      // this.producto.imagenes.imagenProducto_Url = imagenUrl; // Asigna la URL de la imagen
+      formData.append('imagenes', this.file, this.file.name);
     }
-  
-    console.log('Producto a guardar:', this.producto);
-    this.productosService.postProduct(this.producto).subscribe(
+
+    this.productosService.postProduct(formData).subscribe(
       (data) => {
+         this.presentAlert(
+          'Verificado',
+          'El producto ha sido guardado correctamente.',
+          'OK',
+          () => {
+            this.router.navigate(['/productos']);
+          }
+        );
         console.log('Producto guardado:', data);
       },
       (error) => {
         console.error('Error al guardar el producto:', error);
+        this.presentAlert(
+          'Error',
+          'El producto no se guardó correctamente.',
+          'OK',
+          () => {
+          }
+        );
       }
     );
   }
-  
 
   onFileSelected(event: any) {
-    this.file = event.target.files[0];
-    if (this.file) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files ? input.files[0] : null;
+    
+    if (file && (file.type === 'image/jpeg' || file.type === 'image/png')) {
+      this.file = file;
+      this.productoForm.patchValue({ imagen: file });
       console.log('Archivo seleccionado:', this.file.name);
+    } else {
+      console.error('Formato de archivo no soportado');
     }
   }
-
-
-
-
-  
 
   cargarCategorias() {
     this.productosService.getCategories().subscribe((data) => {
@@ -121,6 +126,32 @@ export class AgregarProductoPage implements OnInit {
     await alert.present();
   }
 
+  private async presentAlert(
+    header: string,
+    message: string,
+    buttonText: string,
+    handler: () => void
+  ) {
+    const alert = await this.alertController.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: buttonText,
+          handler,
+          cssClass: 'alert-button',
+        },
+      ],
+    });
+
+    await alert.present();
+    const button = document.querySelector(`.alert-button`);
+    if (button) {
+      button.setAttribute('style', 'color: #F67704;'); 
+    }
+  }
+
+
   guardarCategoria(nombre: string) {
     if (nombre && nombre.trim() !== '') {
       this.productosService.postCategory({ nombre }).subscribe((data) => {
@@ -130,9 +161,8 @@ export class AgregarProductoPage implements OnInit {
       console.log('Nombre de categoría no válido');
     }
   }
+
   onDisponibleChange(value: string) {
-    if (this.producto) {
-      this.producto.producto_Disponible = (value === 'si');
-    }
+    this.productoForm.patchValue({ producto_Disponible: value === 'true' });
   }
 }
