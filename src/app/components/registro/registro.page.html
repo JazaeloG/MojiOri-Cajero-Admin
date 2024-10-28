@@ -1,0 +1,65 @@
+<ion-content>
+  <form [formGroup]="registroForm" (ngSubmit)="registrar()">
+    <div class="form-container">
+      <div class="header-container">
+        <h2>Crear cuenta</h2>
+        <h1>Cajero</h1>
+      </div>
+      <div class="form">
+        <!-- Campo Usuario -->
+        <ion-item>
+          <ion-input label="Usuario" color="medium" label-placement="floating" formControlName="usuario_Usuario" type="text"></ion-input>
+        </ion-item>
+        <ion-note
+          *ngIf="registroForm.get('usuario_Usuario')?.hasError('required') && registroForm.get('usuario_Usuario')?.touched"
+          class="error-custom">
+          El usuario es obligatorio.
+        </ion-note>
+
+        <!-- Campo Contraseña -->
+        <ion-item>
+          <ion-input label="Contraseña" color="medium" label-placement="floating" formControlName="cuenta_Contrasena" type="password"></ion-input>
+        </ion-item>
+        <ion-note
+          *ngIf="registroForm.get('cuenta_Contrasena')?.hasError('minlength') && registroForm.get('cuenta_Contrasena')?.touched"
+          class="error-custom">
+          La contraseña debe tener al menos 8 caracteres.
+        </ion-note>
+
+        <!-- Campo Teléfono -->
+        <ion-item>
+          <ion-input label="Teléfono celular" color="medium" label-placement="floating" formControlName="cuenta_Telefono" type="tel"></ion-input>
+        </ion-item>
+
+
+        <!-- Campo Cumpleaños -->
+        <ion-item>
+          <ion-input (click)="toggleDateTime()" [value]="formattedDate" readonly label="Cumpleaños" color="medium" label-placement="floating" type="text" ></ion-input>
+        </ion-item>
+        <ion-note
+          *ngIf="registroForm.get('usuario_FechaNacimiento')?.hasError('required') && registroForm.get('usuario_FechaNacimiento')?.touched"
+          class="error-custom">
+          La fecha de nacimiento es obligatoria.
+        </ion-note>
+
+        <!-- ion-datetime -->
+        <ion-datetime *ngIf="showDateTime"
+          color="#987100"
+          presentation="date"
+          [showDefaultButtons]="true"
+          doneText="Listo"
+          cancelText="Cancelar"
+          (ionChange)="onDateChange($event)"
+          (ionCancel)="toggleDateTime()"
+          class="custom-date">
+        </ion-datetime>
+
+        <!-- Botón Continuar -->
+        <ion-button expand="block" class="custom-button-1" [disabled]="registroForm.invalid" type="submit" 
+          >
+          CONTINUAR
+        </ion-button>
+      </div>
+    </div>
+  </form>
+</ion-content>
