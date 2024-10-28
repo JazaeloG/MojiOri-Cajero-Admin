@@ -2,95 +2,103 @@
   <div class="content-container">
     <h1 class="title">Agregar producto</h1>
     <div class="contenedor">
-      <div class="select">
+      <form [formGroup]="productoForm" (ngSubmit)="guardarProducto()">
+        <div class="select">
+          <ion-select
+            formControlName="id_Categoria"
+            color="warning"
+            class="input-container"
+            placeholder="1"
+            interface="popover"
+            fill="outline"
+            label="Categoria"
+          >
+            <ion-select-option [value]="categoria.id_Categoria" *ngFor="let categoria of categorias">
+              {{categoria.categoria_Nombre}}
+            </ion-select-option>
+          </ion-select>
+          <ion-button (click)="mostrarAlertaGuardarCategoria()" class="custom-button-1">
+            <ion-icon name="add-circle-outline"></ion-icon>
+          </ion-button>
+        </div>
+
         <ion-select
+          formControlName="producto_Disponible"
           color="warning"
           class="input-container"
-          placeholder="1"
+          placeholder="si"
           interface="popover"
           fill="outline"
-          label=" Categoria"
-          [value]="producto?.id_Categoria" 
+          label="Disponible"
+          (ionChange)="onDisponibleChange($event.detail.value)"
         >
-        <ion-select-option [value]="categoria.id_Categoria" *ngFor="let categoria of categorias">{{categoria.categoria_Nombre}}</ion-select-option>
-        </ion-select >
-        <ion-button  (click)="mostrarAlertaGuardarCategoria()" class="custom-button-1">
-          <ion-icon name="add-circle-outline"></ion-icon>
-        </ion-button>
-      </div>
+          <ion-select-option value="true">Sí</ion-select-option>
+          <ion-select-option value="false">No</ion-select-option>
+        </ion-select>
 
-      <ion-select
+        <ion-input
+          formControlName="producto_Nombre"
+          color="warning"
+          class="input-container"
+          label="Nombre"
+          label-placement="floating"
+          fill="outline"
+          placeholder="Hojaldre"
+        ></ion-input>
+
+        <ion-input
+          formControlName="producto_Descripcion"
+          color="warning"
+          class="input-container"
+          label="Descripción"
+          label-placement="floating"
+          fill="outline"
+          placeholder="Descripción"
+        ></ion-input>
+
+        <ion-input
+          formControlName="producto_Precio"
+          color="warning"
+          class="input-container"
+          label="Precio"
+          label-placement="floating"
+          fill="outline"
+          placeholder="15.00"
+        ></ion-input>
+
+        <ion-input
+          formControlName="producto_PrecioPuntos"
+          color="warning"
+          class="input-container"
+          label="Precio Puntos"
+          label-placement="floating"
+          fill="outline"
+          placeholder="200"
+        ></ion-input>
+        <ion-input
         color="warning"
         class="input-container"
-        placeholder="si"
-        interface="popover"
-        fill="outline"
-        label=" Disponible"
-        [value]="(producto?.producto_Disponible !== undefined) ? (producto?.producto_Disponible ? 'si' : 'no') : 'no'" 
-        (ionChange)="onDisponibleChange($event.detail.value)"      >
-        <ion-select-option value="si">Sí</ion-select-option>
-        <ion-select-option value="no">No</ion-select-option>
-      </ion-select>
-
-      <ion-input
-        color="warning"
-        class="input-container"
-        label="Nombre"
+        label="Imagen"
         label-placement="floating"
         fill="outline"
-        placeholder="Hojaldre"
-        [value]="producto?.producto_Nombre"
-      ></ion-input>
-      <ion-input
-      color="warning"
-      class="input-container"
-      label="Descripción"
-      label-placement="floating"
-      fill="outline"
-      placeholder="Descripción"
-      [value]="producto?.producto_Descripcion"
-    ></ion-input>
-      <ion-input
-        color="warning"
-        class="input-container"
-        label="Precio"
-        label-placement="floating"
-        fill="outline"
-        placeholder="15.00"
-        [value]="producto?.producto_Precio"
-
-      ></ion-input>
-      <ion-input
-        color="warning"
-        class="input-container"
-        label="Precio Puntos"
-        label-placement="floating"
-        fill="outline"
-        placeholder="200"
-        [value]="producto?.producto_PrecioPuntos"
+        placeholder="img"
+        value="{{file?.name}}"
+        [readonly]="true"
       ></ion-input>
 
-      <div class="image-upload-container">
-        <img
-          [src]="producto?.imagenes?.imagenProducto_Url"
-          alt="Producto"
-          class="product-image"
-        />
-        <ion-button (click)="fileInput.click()" class="custom-button-2"
-          >Seleccionar archivo
-          <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
-          <input
-            type="file"
-            #fileInput
-            class="file-input"
-            (change)="onFileSelected($event)"
-          />
-        </ion-button>
-      </div>
+        <div class="image-upload-container">
+            <ion-button (click)="fileInput.click()" class="custom-button-2">
+            Seleccionar archivo
+            <ion-icon slot="start" name="cloud-upload-outline"></ion-icon>
+            <input type="file" #fileInput class="file-input" (change)="onFileSelected($event)" />
+          </ion-button>
+          
+        </div>
 
-      <div class="  guardar">
-        <ion-button class="custom-button-1 " (click)="guardarProducto()"> Guardar </ion-button>
-      </div>
+        <div class="guardar">
+          <ion-button class="custom-button-1" [disabled]="productoForm.invalid" type="submit">Guardar</ion-button>
+        </div>
+      </form>
     </div>
   </div>
 </ion-content>

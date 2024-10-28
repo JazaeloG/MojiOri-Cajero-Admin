@@ -6,13 +6,13 @@
         <ion-select
           color="warning"
           class="input-container"
-          placeholder="Seleccionar"
+          placeholder="1"
           interface="popover"
           fill="outline"
           label=" Categoria"
-          [value]="producto?.categoria?.categoria_Nombre" 
+          [value]="producto?.id_Categoria" 
         >
-        <ion-select-option [value]="categoria.categoria_Nombre" *ngFor="let categoria of categorias">{{categoria.categoria_Nombre}}</ion-select-option>
+        <ion-select-option [value]="categoria.id_Categoria" *ngFor="let categoria of categorias">{{categoria.categoria_Nombre}}</ion-select-option>
         </ion-select>
         <ion-button  (click)="mostrarAlertaGuardarCategoria()" class="custom-button-1">
           <ion-icon name="add-circle-outline"></ion-icon>
@@ -22,14 +22,14 @@
       <ion-select
         color="warning"
         class="input-container"
-        placeholder="Seleccionar"
+        placeholder="si"
         interface="popover"
         fill="outline"
         label=" Disponible"
-        [value]="(producto?.producto_Disponible !== undefined) ? (producto?.producto_Disponible ? 'si' : 'no') : 'no'" 
-        (ionChange)="onDisponibleChange($event.detail.value)"      >
-        <ion-select-option value="si">Sí</ion-select-option>
-        <ion-select-option value="no">No</ion-select-option>
+        [value]="producto?.producto_Disponible" 
+        (ionChange)="onDisponibleChange($event.detail.value)">
+        <ion-select-option value="true">Sí</ion-select-option>
+        <ion-select-option value="false">No</ion-select-option>
       </ion-select>
 
       <ion-input
@@ -90,8 +90,7 @@
 
       <div class="  guardar">
         <ion-button class="custom-button-1 " (click)="actualizarProducto()" > Guardar </ion-button>
-        <ion-button class="custom-button-4 " (click)="actualizarProducto()" > <ion-icon name="trash-outline"></ion-icon> Eliminar </ion-button>
-
+        <ion-button class="custom-button-4 " (click)="alertaEliminarProducto()" > <ion-icon name="trash-outline"></ion-icon> Eliminar </ion-button>
       </div>
       
     </div>
