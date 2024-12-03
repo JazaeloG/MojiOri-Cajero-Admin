@@ -38,9 +38,21 @@ const routes: Routes = [
           ),
       },
       {
+        path: 'configuracion',
+        loadChildren: () =>
+          import('../configuracion/configuracion-routing.module').then(
+            (m) => m.ConfiguracionPageRoutingModule
+          ),
+      },
+      {
         path: 'perfil',
         loadChildren: () => import('../perfil/perfil.module').then( m => m.PerfilPageModule)
       },
+      
+  {
+    path: 'graficas',
+    loadChildren: () => import('../graficas/graficas.module').then( m => m.GraficasPageModule)
+  },
       {
         path: 'registro',
         loadChildren: () => import('../registro/registro.module').then( m => m.RegistroPageModule)
@@ -50,6 +62,11 @@ const routes: Routes = [
         redirectTo: '/home',
         pathMatch: 'full',
       },
+      
+  {
+    path: 'agregar-promocion',
+    loadChildren: () => import('../agregar-promocion/agregar-promocion.module').then( m => m.AgregarPromocionPageModule)
+  }
     ],
   },
   {

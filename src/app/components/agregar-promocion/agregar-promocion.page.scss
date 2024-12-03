@@ -46,17 +46,6 @@
     left: -9999px; 
   }
  
-  .select{
-    display: flex;
-    align-items: left;
-    justify-content: left;
-
-    ion-button{
-        height: 30px;
-        margin-right: 50px;
-    }
-  }
-
   .guardar{
     width: 100%;
     display: flex;
@@ -68,7 +57,7 @@
     }
   }
   img {
-    width: 160px;
+    width: 200px;
     height: 160px;
     border-radius: 15px;
     margin: 20px 20px;

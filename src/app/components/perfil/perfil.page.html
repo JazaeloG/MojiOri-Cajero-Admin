@@ -7,7 +7,8 @@
       >
     </div>
     <div class= "perfiles" >
-      <ion-card  class="horizontal-card">
+      <ion-spinner *ngIf="!administradores" color="warning"></ion-spinner>
+      <ion-card  class="horizontal-card" *ngFor="let admin of administradores">
         <div class="card-content-wrapper">
           <img
             alt="Silhouette of mountains"
@@ -16,25 +17,25 @@
           />
           <div class="text-content">
             <ion-card-header>
-              <ion-card-title>Administrador</ion-card-title>
-              <ion-card-subtitle>Nombre: Juanito Banana</ion-card-subtitle>
+              <ion-card-title>Administrador {{admin.id_Cuenta}}</ion-card-title>
+              <ion-card-subtitle>Nombre: {{admin.usuario.usuario_Usuario}}</ion-card-subtitle>
             </ion-card-header>
             <ion-card-content>
-              Teléfono: 2711234568
+              Teléfono:  {{admin.cuenta_Telefono}} 
               <ion-button fill="clear" color="warning">Cerrar sesión</ion-button>
             </ion-card-content>
           </div>
         </div>
       </ion-card>
       
-
-      <ion-card >
+      <ion-spinner *ngIf="!cajeros" color="warning"></ion-spinner>
+      <ion-card *ngFor="let cajero of cajeros">
         <ion-card-header>
-          <ion-card-title>Cajero</ion-card-title>
-          <ion-card-subtitle>Nombre: Juanito Perez</ion-card-subtitle>
+          <ion-card-title>Cajero {{cajero.id_Cuenta}}</ion-card-title>
+          <ion-card-subtitle>Nombre: {{cajero.usuario.usuario_Usuario}}</ion-card-subtitle>
         </ion-card-header>
       
-        <ion-card-content> Teléfono: 2711234568 
+        <ion-card-content> Teléfono: {{cajero.cuenta_Telefono}} 
           <ion-button fill="clear" color="warning" >Editar</ion-button>
         </ion-card-content>
       </ion-card>

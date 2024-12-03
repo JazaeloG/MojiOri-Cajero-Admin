@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminProductosService } from 'src/app/services/admin-productos.service';
 import { AlertController } from '@ionic/angular';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { Router } from '@angular/router';
-
+import { LoadingController } from '@ionic/angular';
 
 @Component({
   selector: 'app-editar-producto',
@@ -13,34 +13,39 @@ import { Router } from '@angular/router';
 export class EditarProductoPage implements OnInit {
   categorias: any;
   idProducto!: number;
-  producto: {
-    producto_Disponible: boolean;
-    producto_Nombre: string;
-    producto_Descripcion: string;
-    producto_Precio: number;
-    producto_PrecioPuntos: number;
-    id_Categoria: number,
-    categoria_Nombre: string;
-    imagenes: {
-      imagenProducto_Url: string;
-    }
-  } | undefined 
+  producto:
+    | {
+        producto_Disponible: boolean;
+        producto_Nombre: string ;
+        producto_Descripcion: string;
+        producto_Precio: number;
+        producto_PrecioPuntos: number;
+        id_Categoria: number;
+        categoria_Nombre: string;
+        imagenes: {
+          imagenProducto_Url: string;
+        };
+      }
+    | undefined;
   patchProducto: any;
-  archivo: {
-    id: number;
-    nombre: string;
-    imagen: string;
-  } | undefined
+  archivo:
+    | {
+        id: number;
+        nombre: string;
+        imagen: string;
+      }
+    | undefined;
 
   constructor(
     private productosService: AdminProductosService,
     private alertController: AlertController,
+    private loadingController: LoadingController,
     private activatedRoute: ActivatedRoute,
-    private router: Router,
+    private router: Router
   ) {}
 
   ngOnInit() {
-    this.activatedRoute.params.subscribe(params => {
+    this.activatedRoute.params.subscribe((params) => {
       this.idProducto = +params['id'];
     });
     this.cargarCategorias();
@@ -48,63 +53,146 @@ export class EditarProductoPage implements OnInit {
   }
 
   getProductoData() {
-    this.productosService.getProductsById(this.idProducto).subscribe((data:any) => {
-      if (data) {
-        this.producto = {
-          producto_Disponible: data.producto_Disponible,
-          producto_Nombre: data.producto_Nombre,
-          producto_Descripcion: data.producto_Descripcion,
-          producto_Precio: data.producto_Precio,
-          producto_PrecioPuntos: data.producto_PrecioPuntos,
-          imagenes: {
-            imagenProducto_Url: 'http://desarrollo.mojiorizaba.com:3000/' + data.imagenes[data.imagenes.length - 1]?.imagenProducto_Url || 'https://via.placeholder.com/147x139',
-          },
-          id_Categoria: data.categoria.id_Categoria,
-          categoria_Nombre: data.categoria.categoria_Nombre
-        };
-      }
-    });
+    this.productosService
+      .getProductsById(this.idProducto)
+      .subscribe((data: any) => {
+        if (data) {
+          this.producto = {
+            producto_Disponible: data.producto_Disponible,
+            producto_Nombre: data.producto_Nombre,
+            producto_Descripcion: data.producto_Descripcion,
+            producto_Precio: data.producto_Precio,
+            producto_PrecioPuntos: data.producto_PrecioPuntos,
+            imagenes: {
+              imagenProducto_Url:
+                'http://desarrollo.mojiorizaba.com:3000/' +
+                  data.imagenes[data.imagenes.length - 1]?.imagenProducto_Url ||
+                'https://via.placeholder.com/147x139',
+            },
+            id_Categoria: data.categoria.id_Categoria,
+            categoria_Nombre: data.categoria.categoria_Nombre,
+          };
+        }
+      });
   }
 
   async actualizarProducto() {
-    await this.actualizarInputs();
-
+    this.patchProducto = {
+      producto_Disponible: this.producto?.producto_Disponible,
+      producto_Nombre: this.producto?.producto_Nombre,
+      producto_Descripcion: this.producto?.producto_Descripcion,
+      producto_Precio: this.producto?.producto_Precio,
+      producto_PrecioPuntos: this.producto?.producto_PrecioPuntos,
+      id_Categoria: this.producto?.id_Categoria,
+    };
+  
+    console.log('patchProducto', this.patchProducto);
+  
     if (this.patchProducto) {
-      this.productosService.patchProduct(this.idProducto, this.patchProducto).subscribe((data) => {
-        console.log('Producto actualizado:', data);
-        this.presentAlert(
-          'Actualizado',
-          'El producto ha sido actualizado correctamente.',
-          'OK',
-          () => {
-            this.router.navigate(['/productos']);
-          }
-        );
-      }); 
+      const loading = await this.loadingController.create({
+        message: 'Guardando producto...',
+        spinner: 'crescent',
+        cssClass: 'custom-loading',
+      });
+      await loading.present();
+  
+      this.productosService.patchProduct(this.idProducto, this.patchProducto).subscribe(
+        async (data) => {
+          await loading.dismiss();
+          console.log('Producto actualizado:', data);
+          this.presentAlert(
+            'Actualizado',
+            'El producto ha sido actualizado correctamente.',
+            'OK',
+            () => {
+              this.router.navigate(['/productos']);
+            }
+          );
+        },
+        async (error) => {
+          await loading.dismiss();
+          console.error('Error al actualizar el producto:', error);
+          this.presentAlert(
+            'Error',
+            'El producto no se actualizó correctamente.',
+            'OK',
+            () => {}
+          );
+        }
+      );
     }
   }
+  
 
-  eliminarProducto() {
+
+  async eliminarProducto() {
     console.log(this.idProducto);
-    this.productosService.deleteProduct(this.idProducto).subscribe(() => {
+    const loading = await this.loadingController.create({
+      message: 'Eliminando producto...',
+      spinner: 'crescent',
+      cssClass: 'custom-loading',
+    });
+    await loading.present();
+    this.productosService.deleteProduct(this.idProducto).subscribe(async () => {
+      await loading.dismiss();
       console.log(`Producto con ID ${this.idProducto} eliminado.`);
       this.router.navigate(['/productos']);
-    });
+    },
+     async (error) => {
+      await loading.dismiss();
+      console.error('Error al eliminar el producto:', error);
+      this.presentAlert(
+        'Error',
+        'El producto no se eliminó correctamente.',
+        'OK',
+        () => {
+        }
+      );
+    }
+  );
   }
-  
-actualizarInputs() {
-  this.patchProducto = {
-    producto_Disponible: (document.querySelector('ion-select[placeholder="si"]') as HTMLSelectElement).value,
-    producto_Nombre: (document.querySelector('ion-input[placeholder="Hojaldre"]') as HTMLInputElement).value,
-    producto_Descripcion: (document.querySelector('ion-input[placeholder="Descripción"]') as HTMLInputElement).value,
-    producto_Precio: parseFloat((document.querySelector('ion-input[placeholder="15.00"]') as HTMLInputElement).value),
-    producto_PrecioPuntos: parseFloat((document.querySelector('ion-input[placeholder="200"]') as HTMLInputElement).value),
-    id_Categoria: Number((document.querySelector('ion-select[placeholder="1"]') as HTMLSelectElement).value),
+
+  actualizarInputs() {
+    this.patchProducto = {
+      producto_Disponible: (
+        document.querySelector(
+          'ion-select[placeholder="si"]'
+        ) as HTMLSelectElement
+      ).value,
+      producto_Nombre: (
+        document.querySelector(
+          'ion-input[placeholder="Hojaldre"]'
+        ) as HTMLInputElement
+      ).value,
+      producto_Descripcion: (
+        document.querySelector(
+          'ion-input[placeholder="Descripción"]'
+        ) as HTMLInputElement
+      ).value,
+      producto_Precio: parseFloat(
+        (
+          document.querySelector(
+            'ion-input[placeholder="15.00"]'
+          ) as HTMLInputElement
+        ).value
+      ),
+      producto_PrecioPuntos: parseFloat(
+        (
+          document.querySelector(
+            'ion-input[placeholder="200"]'
+          ) as HTMLInputElement
+        ).value
+      ),
+      id_Categoria: Number(
+        (
+          document.querySelector(
+            'ion-select[placeholder="1"]'
+          ) as HTMLSelectElement
+        ).value
+      ),
+    };
+    console.log('patchProducto', this.patchProducto);
   }
-  console.log('patchProducto', this.patchProducto);
-}
-
-
 
   onFileSelected(event: any) {
     const file = event.target.files[0];
@@ -120,7 +208,10 @@ actualizarInputs() {
   }
   async alertaEliminarProducto() {
     const alert = await this.alertController.create({
-      header: '¿Desea eliminar '+this.producto?.producto_Nombre +' de la lista de productos?',
+      header:
+        '¿Desea eliminar ' +
+        this.producto?.producto_Nombre +
+        ' de la lista de productos?',
       buttons: [
         {
           text: 'Cancelar',
@@ -131,8 +222,8 @@ actualizarInputs() {
           text: 'Eliminar',
           cssClass: 'alert-button-confirm',
           handler: (data) => {
-           this.eliminarProducto();
-         },
+            this.eliminarProducto();
+          },
         },
       ],
     });
@@ -189,10 +280,9 @@ actualizarInputs() {
     await alert.present();
     const button = document.querySelector(`.alert-button`);
     if (button) {
-      button.setAttribute('style', 'color: #F67704;'); 
+      button.setAttribute('style', 'color: #F67704;');
     }
   }
-
 
   guardarCategoria(nombre: string) {
     if (nombre && nombre.trim() !== '') {
@@ -205,7 +295,7 @@ actualizarInputs() {
   }
   onDisponibleChange(value: string) {
     if (this.producto) {
-      this.producto.producto_Disponible = (value === 'si');
+      this.producto.producto_Disponible = value === 'si';
     }
   }
 }

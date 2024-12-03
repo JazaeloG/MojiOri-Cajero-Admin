@@ -21,8 +21,8 @@
           </ion-button>
         </ion-item>
         <ion-item>
-          <ion-button (click)="selectMenu('pedidos')" [ngClass]="{'selected': selectedMenu === 'pedidos'}">
-            <ion-icon name="person-outline"></ion-icon> usuarios
+          <ion-button (click)="selectMenu('pedidos')" [ngClass]="{'selected': selectedMenu === 'pedidos'}" routerLink="/configuracion">
+            <ion-icon name="person-outline"></ion-icon> Configuracion
           </ion-button>
         </ion-item>
       </ion-list>
@@ -38,10 +38,10 @@
           </ion-tab-button>
           <div class="tab-title"  *ngIf="isDesktop()">Bienvenido</div>
 
-          <ion-tab-button tab="productos" color="light">
+          <ion-tab-button tab="graficas" color="light">
             <ion-icon name="bar-chart-outline"></ion-icon>
           </ion-tab-button>
-          <ion-tab-button tab="agregar-producto">
+          <ion-tab-button tab="productos">
             <ion-icon name="home-outline"></ion-icon>
           </ion-tab-button>
           <ion-tab-button tab="perfil">

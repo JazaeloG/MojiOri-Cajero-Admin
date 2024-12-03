@@ -9,6 +9,8 @@
     <ion-row>
       <ion-col size="6" size-md="4" *ngFor="let product of productos">
         <div class="product-card">
+          <ion-spinner *ngIf="!product.img" color="warning"></ion-spinner>
+
           <img  [src]="product.img" [alt]="product.nombre" class="product-image" />
           <div class="product-info">
             <div class="product-text">

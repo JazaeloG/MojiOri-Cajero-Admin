@@ -61,6 +61,7 @@
     --background: #ffffff;
     --color: #F67704;
     --border-radius: 15px;
+
     border: 1px solid #f77c09;
     margin-top: 20px;
     border-radius: 15px;
@@ -119,3 +120,9 @@
     color: #FDB300;
     border-radius: 8px;
   }
+  .custom-loading {
+    --color: #ff6600; // Cambia el color principal aquí
+    --spinner-color: #ff6600;
+    --text-color: #ff6600;
+  }
+  

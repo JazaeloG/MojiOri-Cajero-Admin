@@ -1,0 +1,83 @@
+<ion-content>
+  <div class="container">
+    <div  class="card">
+      <div class="header">
+        <h2>Promociones</h2>
+        <ion-segment color="medium" value="todas" (ionChange)="segmentChanged($event)">
+          <ion-segment-button value="todas">
+            <ion-label>Todas</ion-label>
+          </ion-segment-button>
+          <ion-segment-button value="activas">
+            <ion-label>Activas</ion-label>
+          </ion-segment-button>
+        </ion-segment>
+
+      </div>
+      <ion-spinner *ngIf="!promociones" color="warning"></ion-spinner>
+
+      <div class="category-item" *ngFor=" let promociones of displayedPromociones ">
+        <div class="category-box">{{promociones.promocion.promocion_Titulo}}
+          <ion-button class="edit-button" (click)=" alertaEliminarProducto(promociones.promocion.id_Promocion,promociones.promocion.promocion_Titulo )">
+            <ion-icon name="trash-outline" color="danger"></ion-icon>          </ion-button>
+        </div>
+      </div>
+      <ion-button class="custom-button-1" routerLink="/agregar-promocion">Agregar promoción</ion-button>
+
+    </div>
+
+    <div class="card">
+      <h2>Configuración 01</h2>
+      <div class="input">
+        <ion-input 
+          [disabled]="!isEditing" 
+          [(ngModel)]="percentage" 
+          type="number" 
+          label="Porcentaje de puntos" 
+          placeholder="%" 
+          min="0" 
+          max="100" 
+          color="warning">
+        </ion-input>
+        
+        <div *ngIf="!isEditing">
+          <ion-button class="edit-button" (click)="startEditing()">
+            <ion-icon name="create-outline"></ion-icon>
+          </ion-button>
+        </div>
+        <div *ngIf="isEditing" class="editar-configuracion">
+          <ion-button class="custom-button-1" (click)="saveConfig()">
+            Guardar
+          </ion-button>
+          <ion-button  class="custom-button-2" (click)="cancelEdit()">
+            Cancelar
+          </ion-button>
+        </div>
+      </div>
+    </div>
+    
+
+    <div class="card">
+      <h2>Categorias</h2>
+
+      <div class="category-item">
+        <div class="category-box">Pizzas
+          <ion-icon name="create-outline"></ion-icon>
+        </div>
+      </div>
+
+      <div class="category-item">
+        <div class="category-box">Hojaldres
+          <ion-button class="edit-button" >
+            <ion-icon name="create-outline"></ion-icon>
+          </ion-button>
+        </div>
+      </div>
+
+      <div class="category-item">
+        <div class="category-box"><p>Aguas</p>          
+          <ion-icon name="create-outline"></ion-icon>
+      </div>
+      </div>
+    </div>
+  </div>
+</ion-content>

@@ -1,18 +1,18 @@
 import { Component, OnInit } from '@angular/core';
 import { AdminProductosService } from 'src/app/services/admin-productos.service';
+import { ConfiguracionService } from 'src/app/services/configuracion.service';
 import { AlertController } from '@ionic/angular';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular'; 
 
-
 @Component({
-  selector: 'app-agregar-producto',
-  templateUrl: './agregar-producto.page.html',
-  styleUrls: ['./agregar-producto.page.scss'],
+  selector: 'app-agregar-promocion',
+  templateUrl: './agregar-promocion.page.html',
+  styleUrls: ['./agregar-promocion.page.scss'],
 })
-export class AgregarProductoPage implements OnInit {
-  categorias: any;
+export class AgregarPromocionPage implements OnInit {
+  productos: any;
   file: any;
   productoForm!: FormGroup;
 
@@ -21,20 +21,20 @@ export class AgregarProductoPage implements OnInit {
     private alertController: AlertController,
     private loadingController: LoadingController,
     private formBuilder: FormBuilder,
-    private router: Router
+    private router: Router,
+    private configuracionService: ConfiguracionService
   ) {}
 
   ngOnInit() {
     console.log('token', localStorage.getItem('authToken'));
-    this.cargarCategorias();
+    this.cargarproductos();
 
     this.productoForm = this.formBuilder.group({
-      producto_Nombre: ['', Validators.required],
-      producto_Descripcion: ['', Validators.required],
-      producto_Precio: [null, [Validators.required, Validators.min(0.01)]],
-      producto_PrecioPuntos: [null, [Validators.required, Validators.min(1)]],
-      id_Categoria: [null, Validators.required],
-      producto_Disponible: [null, Validators.required],
+      id_Producto: ['', Validators.required],
+      promocionProducto_FechaInicio: [null, Validators.required],
+      promocionProducto_FechaFin: [null, [Validators.required]],
+      promocion_Titulo: [null, [Validators.required]],
+      promocion_Descripcion: [null, Validators.required],
       imagen: [null, Validators.required],
     });
   }
@@ -44,43 +44,42 @@ export class AgregarProductoPage implements OnInit {
       return; 
     }
     const loading = await this.loadingController.create({
-      message: 'Guardando producto...',
+      message: 'Guardando promoción...',
       spinner: 'crescent',
       cssClass: 'custom-loading' 
     });
     await loading.present();
 
     const formData = new FormData();
-    formData.append('producto_Nombre', this.productoForm.value.producto_Nombre);
-    formData.append('producto_Descripcion', this.productoForm.value.producto_Descripcion);
-    formData.append('producto_Precio', this.productoForm.value.producto_Precio.toString());
-    formData.append('producto_PrecioPuntos', this.productoForm.value.producto_PrecioPuntos.toString());
-    formData.append('id_Categoria', this.productoForm.value.id_Categoria.toString());
-    formData.append('producto_Disponible', this.productoForm.value.producto_Disponible ? 'true' : 'false');
+    formData.append('id_Producto', this.productoForm.value.id_Producto);
+    formData.append('promocionProducto_FechaInicio', this.productoForm.value.promocionProducto_FechaInicio);
+    formData.append('promocionProducto_FechaFin', this.productoForm.value.promocionProducto_FechaFin);
+    formData.append('promocion_Titulo', this.productoForm.value.promocion_Titulo);
+    formData.append('promocion_Descripcion', this.productoForm.value.promocion_Descripcion);
 
     if (this.file) {
-      formData.append('imagenes', this.file, this.file.name);
+      formData.append('imagen', this.file, this.file.name);
     }
-
-    this.productosService.postProduct(formData).subscribe(
+    console.log(formData, 'dataa')
+    this.configuracionService.postPromociones(formData).subscribe(
       async (data) => {
         await loading.dismiss();
          this.presentAlert(
           'Verificado',
-          'El producto ha sido guardado correctamente.',
+          'La promoción ha sido guardada correctamente.',
           'OK',
           () => {
-            this.router.navigate(['/productos']);
+            this.router.navigate(['/configuracion']);
           }
         );
-        console.log('Producto guardado:', data);
+        console.log('promocion guardada:', data);
       },
       async (error) => {
         await loading.dismiss();
         console.error('Error al guardar el producto:', error);
         this.presentAlert(
           'Error',
-          'El producto no se guardó correctamente.',
+          'La promoción no se guardó correctamente.',
           'OK',
           () => {
           }
@@ -102,39 +101,11 @@ export class AgregarProductoPage implements OnInit {
     }
   }
 
-  cargarCategorias() {
-    this.productosService.getCategories().subscribe((data) => {
-      this.categorias = data;
+  cargarproductos() {
+    this.productosService.getProducts().subscribe((data) => {
+      this.productos = data;
+      console.log('productos:', this.productos);
     });
-  }
-
-  async mostrarAlertaGuardarCategoria() {
-    const alert = await this.alertController.create({
-      header: 'Nueva Categoría',
-      inputs: [
-        {
-          name: 'categoriaNombre',
-          type: 'text',
-          placeholder: 'Nombre de la categoría',
-        },
-      ],
-      buttons: [
-        {
-          text: 'Cancelar',
-          role: 'cancel',
-          cssClass: 'alert-button-cancel',
-        },
-        {
-          text: 'Guardar',
-          cssClass: 'alert-button-confirm',
-          handler: (data) => {
-            this.guardarCategoria(data.categoriaNombre);
-          },
-        },
-      ],
-    });
-
-    await alert.present();
   }
 
   private async presentAlert(
@@ -160,20 +131,6 @@ export class AgregarProductoPage implements OnInit {
     if (button) {
       button.setAttribute('style', 'color: #F67704;'); 
     }
-  }
-
-
-  guardarCategoria(nombre: string) {
-    if (nombre && nombre.trim() !== '') {
-      this.productosService.postCategory({ categoria_Nombre:nombre }).subscribe((data) => {
-        this.cargarCategorias();
-      });
-    } else {
-    }
-  }
-
-  onDisponibleChange(value: string) {
-    this.productoForm.patchValue({ producto_Disponible: value === 'true' });
   }
 
   imagenArchivo: any;  

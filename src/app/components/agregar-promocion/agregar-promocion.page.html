@@ -1,85 +1,63 @@
 <ion-content>
   <div class="content-container">
-    <h1 class="title">Agregar producto</h1>
+    <h1 class="title">Agregar promoción</h1>
     <div class="contenedor">
       <form [formGroup]="productoForm" (ngSubmit)="guardarProducto()">
-        <div class="select">
-          <ion-select
-            formControlName="id_Categoria"
-            color="warning"
-            class="input-container"
-            placeholder="1"
-            interface="popover"
-            fill="outline"
-            label="Categoria"
-          >
-            <ion-select-option
-              [value]="categoria.id_Categoria"
-              *ngFor="let categoria of categorias"
-            >
-              {{categoria.categoria_Nombre}}
-            </ion-select-option>
-          </ion-select>
-          <ion-button
-            (click)="mostrarAlertaGuardarCategoria()"
-            class="custom-button-1"
-          >
-            <ion-icon name="add-circle-outline"></ion-icon>
-          </ion-button>
-        </div>
 
         <ion-select
-          formControlName="producto_Disponible"
-          color="warning"
-          class="input-container"
-          placeholder="si"
-          interface="popover"
-          fill="outline"
-          label="Disponible"
-          (ionChange)="onDisponibleChange($event.detail.value)"
+        formControlName="id_Producto"
+        color="warning"
+        class="input-container"
+        placeholder="Selecionar"
+        interface="popover"
+        fill="outline"
+        label="Producto"
+      >
+        <ion-select-option
+          [value]="producto.id_Producto"
+          *ngFor="let producto of productos"
         >
-          <ion-select-option value="true">Sí</ion-select-option>
-          <ion-select-option value="false">No</ion-select-option>
-        </ion-select>
+          {{producto.producto_Nombre}}
+        </ion-select-option>
+      </ion-select>
 
         <ion-input
-          formControlName="producto_Nombre"
+          formControlName="promocionProducto_FechaInicio"
           color="warning"
           class="input-container"
-          label="Nombre"
+          label="Fecha de inicio"
           label-placement="floating"
           fill="outline"
-          placeholder="Hojaldre"
+          type="date"
         ></ion-input>
 
         <ion-input
-          formControlName="producto_Descripcion"
+          formControlName="promocionProducto_FechaFin"
           color="warning"
           class="input-container"
-          label="Descripción"
+          label="Fecha de fin"
           label-placement="floating"
           fill="outline"
-          placeholder="Descripción"
+          type="date"
+
         ></ion-input>
 
         <ion-input
-          formControlName="producto_Precio"
+          formControlName="promocion_Titulo"
           color="warning"
           class="input-container"
-          label="Precio"
+          label="Título de la promoción"
           label-placement="floating"
           fill="outline"
-          placeholder="15.00"
         ></ion-input>
 
         <ion-input
-          formControlName="producto_PrecioPuntos"
+          formControlName="promocion_Descripcion"
           color="warning"
           class="input-container"
-          label="Precio Puntos"
+          label="Descripción de la promoción"
           label-placement="floating"
           fill="outline"
-          placeholder="200"
         ></ion-input>
 
         <div class="image-upload-container">

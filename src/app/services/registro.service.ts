@@ -12,7 +12,7 @@ export class RegistroService {
   private apiUrlValidar= environment.baseApiURL+"cuentas/validarCodigo";
   private enviarWA= environment.baseApiURL+"cuentas/enviarCodigo/";
 
-
+  
   constructor(private http: HttpClient) { }
 
   // Método para realizar la solicitud de registro

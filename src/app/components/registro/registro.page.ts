@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { RegistroService } from 'src/app/services/registro.service';
+import { PerfilService } from 'src/app/services/perfil.service';
+import { LoadingController } from '@ionic/angular'; 
+import { AlertController } from '@ionic/angular';
+
 
 @Component({
   selector: 'app-registro',
@@ -15,7 +19,8 @@ export class RegistroPage implements OnInit {
   formattedDate: string = '';
   datosUsuario: any = {};
 
-  constructor(private fb: FormBuilder, private registroService: RegistroService, private router: Router) {}
+  constructor(private fb: FormBuilder, private registroService: PerfilService, private router: Router,     private alertController: AlertController,
+    private loadingController: LoadingController,) {}
 
   ngOnInit() {
     this.registroForm = this.fb.group({
@@ -23,22 +28,48 @@ export class RegistroPage implements OnInit {
       "cuenta_Contrasena": ["", [Validators.required, Validators.minLength(8)]],
       "cuenta_Telefono": ["", [Validators.required, Validators.pattern('^[0-9]{10}$')]],
       "usuario_FechaNacimiento": ["", Validators.required],
+      "cuenta_Rol":["", Validators.required]
     });
   }
 
-  registrar() {
+  async registrar() {
     if (this.registroForm.valid) {
+      const loading = await this.loadingController.create({
+        spinner: 'crescent',
+        cssClass: 'custom-loading' 
+      });
+      await loading.present();
+  
        this.datosUsuario = {
         ...this.registroForm.value,
         cuenta_Estado: "PENDIENTE",
-        cuenta_Rol: "CAJERO",
         usuario_FechaNacimiento: this.formattedDate
       };
      this.registroService.registrarUsuario(this.datosUsuario).subscribe(
-        response => {
-          this.router.navigate(['/verificar-numero', this.datosUsuario.cuenta_Telefono]);
+        async response => {
+          await loading.dismiss();
+          this.presentAlert(
+            'Registro exitoso',
+            'La cuenta ha sido guardada correctamente.',
+            'OK',
+            () => {
+              this.router.navigate(['/perfil']);
+            }
+          );
+          console.log('Registro exitoso', response);
         },
-        error => console.error('Error en el registro', error)
+        async error => {
+          console.error('Error en el registro', error);
+          await loading.dismiss();
+          this.presentAlert(
+            'Error',
+            'La cuenta no se guardó correctamente.',
+            'OK',
+            () => {
+            }
+          );
+        }
+
       );
    }
   }
@@ -61,5 +92,29 @@ export class RegistroPage implements OnInit {
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const year = date.getFullYear();
     return `${day}/${month}/${year}`;
+  }
+  private async presentAlert(
+    header: string,
+    message: string,
+    buttonText: string,
+    handler: () => void
+  ) {
+    const alert = await this.alertController.create({
+      header,
+      message,
+      buttons: [
+        {
+          text: buttonText,
+          handler,
+          cssClass: 'alert-button',
+        },
+      ],
+    });
+
+    await alert.present();
+    const button = document.querySelector(`.alert-button`);
+    if (button) {
+      button.setAttribute('style', 'color: #F67704;'); 
+    }
   }
 }

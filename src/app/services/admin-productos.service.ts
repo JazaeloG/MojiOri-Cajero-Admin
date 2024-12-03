@@ -32,11 +32,6 @@ export class AdminProductosService {
 
 
   postCategory(data: any) {
-    console.log('dattaaa service',data);
-    this.http.post(`${this.ulr}categorias`, data).subscribe(response => {
-      console.log('dattaaa service', response);
-    });
-
     return this.http.post(`${this.ulr}categorias`, data);
   }
 

@@ -6,6 +6,13 @@
         <h1>Cajero</h1>
       </div>
       <div class="form">
+        <!-- Campo Rol -->
+        <ion-item>
+          <ion-select formControlName="cuenta_Rol" interface="popover" placeholder="Rol">
+            <ion-select-option value="CAJERO">Cajero</ion-select-option>
+            <ion-select-option value="ADMINISTRADOR" >Administrador</ion-select-option>
+          </ion-select>
+        </ion-item>
         <!-- Campo Usuario -->
         <ion-item>
           <ion-input label="Usuario" color="medium" label-placement="floating" formControlName="usuario_Usuario" type="text"></ion-input>
@@ -28,7 +35,7 @@
 
         <!-- Campo Teléfono -->
         <ion-item>
-          <ion-input label="Teléfono celular" color="medium" label-placement="floating" formControlName="cuenta_Telefono" type="tel"></ion-input>
+          <ion-input label="Teléfono celular" color="medium" label-placement="floating" formControlName="cuenta_Telefono" type="tel" maxlength="10"></ion-input>
         </ion-item>
 
 
