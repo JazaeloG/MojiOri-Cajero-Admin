@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
+import { LoginService } from 'src/app/services/login.service';
 
 @Component({
   selector: 'app-tabs',
@@ -8,13 +9,16 @@ import { AlertController } from '@ionic/angular';
   styleUrls: ['./tabs.page.scss'],
 })
 export class TabsPage implements OnInit {
+  isAdmin: boolean = false;
 
   constructor(
     private alertController: AlertController,
     private router: Router,
+    private loginService: LoginService
   ) { }
 
   ngOnInit() {
+    this.checkUserRole();
   }
 
   async confirmarSalida() {
@@ -71,5 +75,11 @@ export class TabsPage implements OnInit {
       button.setAttribute('style', 'color: #F67704;'); 
     }
   }
+
+  checkUserRole() {
+    const role = this.loginService.getUserRole(); 
+    this.isAdmin = role === 'ADMINISTRADOR'; 
+  }
+
 
 }

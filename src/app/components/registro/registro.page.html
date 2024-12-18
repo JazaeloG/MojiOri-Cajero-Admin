@@ -39,28 +39,15 @@
         </ion-item>
 
 
-        <!-- Campo Cumpleaños -->
+        <!-- Campo Fecha de nacimiento -->
         <ion-item>
-          <ion-input (click)="toggleDateTime()" [value]="formattedDate" readonly label="Cumpleaños" color="medium" label-placement="floating" type="text" ></ion-input>
+          <ion-input  [value]="formattedDate"  label="Fecha de nacimiento" color="medium" label-placement="floating" type="date" formControlName="usuario_FechaNacimiento"></ion-input>
         </ion-item>
         <ion-note
           *ngIf="registroForm.get('usuario_FechaNacimiento')?.hasError('required') && registroForm.get('usuario_FechaNacimiento')?.touched"
           class="error-custom">
           La fecha de nacimiento es obligatoria.
         </ion-note>
-
-        <!-- ion-datetime -->
-        <ion-datetime *ngIf="showDateTime"
-          color="#987100"
-          presentation="date"
-          [showDefaultButtons]="true"
-          doneText="Listo"
-          cancelText="Cancelar"
-          (ionChange)="onDateChange($event)"
-          (ionCancel)="toggleDateTime()"
-          class="custom-date">
-        </ion-datetime>
-
         <!-- Botón Continuar -->
         <ion-button expand="block" class="custom-button-1" [disabled]="registroForm.invalid" type="submit" 
           >

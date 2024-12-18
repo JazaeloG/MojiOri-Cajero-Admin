@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Platform } from '@ionic/angular';
-
+import { Platform, MenuController } from '@ionic/angular';
 
 @Component({
   selector: 'app-menu',
@@ -8,18 +7,18 @@ import { Platform } from '@ionic/angular';
   styleUrls: ['./menu.page.scss'],
 })
 export class MenuPage implements OnInit {
+  selectedMenu: string = ''; 
 
+  constructor(private platform: Platform, private menuController: MenuController) {}
 
-  ngOnInit() {
-  }
-  constructor(private platform: Platform) {}
+  ngOnInit() {}
 
   isDesktop() {
-    return this.platform.width() > 768; 
+    return this.platform.width() > 768;
   }
-  selectedMenu: string = ''; 
 
   selectMenu(menu: string) {
     this.selectedMenu = menu; 
+    this.menuController.close(); 
   }
 }

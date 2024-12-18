@@ -24,4 +24,7 @@ export class PerfilService {
     });
     return this.http.post(this.url2, datosUsuario, { headers });
   }
+  deleteCuenta(id: number) {
+    return this.http.delete(environment.baseApiURL + 'cuentas/' + id)
+  }
 }

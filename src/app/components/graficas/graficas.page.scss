@@ -1,7 +1,54 @@
-.chart{
-    margin: 50px;
+.contenedor {
+    display: flex;
+    justify-content: space-evenly; 
+    flex-direction: row; 
+    gap: 15px; 
+    padding: 10px;
+    flex-wrap: wrap;
+  }
+  
+  .chart {
+    margin: 15px auto 0px;
     border-radius: 15px;
     background-color: #ffffff;
     padding: 25px;
-}
-
+    width: 46%; 
+    min-width: 250px;
+  }
+  
+  h2 {
+    font-size: 2.5rem;
+  }
+  
+  p {
+    color: rgb(98, 98, 98);
+  }
+  
+  @media screen and (max-width: 700px) {
+    .chart {
+      margin: 0px auto;
+      padding: 15px;
+      width: 93%;
+    }
+  
+    h2 {
+      font-size: 1.5rem;
+    }
+  
+    p {
+      font-size: 1rem;
+    }
+    .fechas{
+      flex-direction: column;
+    }
+  }
+  
+  .fechas{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 10px 0px;
+  }
+  label{
+    color: rgb(98, 98, 98);
+  }

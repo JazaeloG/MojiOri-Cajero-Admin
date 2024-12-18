@@ -3,14 +3,15 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { map, catchError, tap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-
   private loginURL = environment.baseApiURL + 'login';
   private profileURL = environment.baseApiURL + 'login/obtener-perfil';
+
   constructor(private http: HttpClient) { }
 
   login(cuenta_Telefono: string, cuenta_Contrasena: string): Observable<any> {
@@ -19,6 +20,7 @@ export class LoginService {
       tap(response => {
         if (response.token) {
           localStorage.setItem('authToken', response.token);
+          this.storeUserRole(); // Almacenar el rol del usuario
         }
       }),
       map(response => response.token ? { success: true, token: response.token } : { success: false, error: 'Credenciales incorrectas' }),
@@ -51,7 +53,22 @@ export class LoginService {
     );
   }
 
+  private storeUserRole(): void {
+    this.getProfile().subscribe(profile => {
+      if (profile) {
+        localStorage.setItem('userRole', profile.cuenta_Rol);
+      }
+    });
+  }
+
+  getUserRole(): string | null {
+    return localStorage.getItem('userRole');
+  }
+
   logout(): void {
     localStorage.removeItem('authToken');
+    localStorage.removeItem('userRole');
   }
 }
+
+

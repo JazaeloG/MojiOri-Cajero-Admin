@@ -10,10 +10,14 @@
     <ion-content class="ion-padding">
       <ion-list>
         <ion-item>
-          <ion-button  class="menu-button" (click)="selectMenu('home')" [ngClass]="{'selected': selectedMenu === 'home'}">
-            <ion-icon name="home-outline" ></ion-icon> home 
+          <ion-button routerLink="cajero/ventas" class="menu-button" (click)="selectMenu('home')" [ngClass]="{'selected': selectedMenu === 'home'}" >
+            <ion-icon name="storefront-outline" ></ion-icon> Ventas 
           </ion-button>
-          
+        </ion-item>
+        <ion-item>
+          <ion-button routerLink="cajero/canjear-codigo" class="menu-button" (click)="selectMenu('canjear-codigo')" [ngClass]="{'selected': selectedMenu === 'canjear-codigo'}" >
+            <ion-icon name="qr-code-outline"></ion-icon>Canjear código 
+          </ion-button> 
         </ion-item>
         <ion-item>
           <ion-button (click)="selectMenu('productos')" [ngClass]="{'selected': selectedMenu === 'productos'}">
@@ -21,8 +25,8 @@
           </ion-button>
         </ion-item>
         <ion-item>
-          <ion-button (click)="selectMenu('pedidos')" [ngClass]="{'selected': selectedMenu === 'pedidos'}" routerLink="/configuracion">
-            <ion-icon name="person-outline"></ion-icon> Configuracion
+          <ion-button (click)="selectMenu('configuracion')" [ngClass]="{'selected': selectedMenu === 'configuracion'}" routerLink="/configuracion">
+            <ion-icon name="settings-outline"></ion-icon> Configuracion
           </ion-button>
         </ion-item>
       </ion-list>

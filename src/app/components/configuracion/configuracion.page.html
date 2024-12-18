@@ -14,29 +14,33 @@
 
       </div>
       <ion-spinner *ngIf="!promociones" color="warning"></ion-spinner>
-
-      <div class="category-item" *ngFor=" let promociones of displayedPromociones ">
-        <div class="category-box">{{promociones.promocion.promocion_Titulo}}
-          <ion-button class="edit-button" (click)=" alertaEliminarProducto(promociones.promocion.id_Promocion,promociones.promocion.promocion_Titulo )">
-            <ion-icon name="trash-outline" color="danger"></ion-icon>          </ion-button>
+      <div class="category-item" *ngFor="let promociones of displayedPromociones">
+        <div class="category-box" (click)="mostrarPromocion(promociones)">
+            {{ promociones.promocion.promocion_Titulo }}
+          <ion-button class="edit-button" (click)="alertaEliminarPromocion(promociones.promocion.id_Promocion, promociones.promocion.promocion_Titulo)">
+            <ion-icon name="trash-outline" color="danger"></ion-icon>
+          </ion-button>
         </div>
       </div>
+      
+     
       <ion-button class="custom-button-1" routerLink="/agregar-promocion">Agregar promoción</ion-button>
-
     </div>
 
-    <div class="card">
-      <h2>Configuración 01</h2>
+    <div class="card"  *ngIf="porcentaje_puntos">
+      <h2>Configuración {{porcentaje_puntos?.configuracion_Clave}}</h2>
       <div class="input">
-        <ion-input 
+        <div class="configuracion">
+          <ion-input 
           [disabled]="!isEditing" 
-          [(ngModel)]="percentage" 
+          [(ngModel)]="porcentaje_puntos.configuracion_Clave" 
           type="number" 
-          label="Porcentaje de puntos" 
+          label="Porcentaje de puntos:" 
           placeholder="%" 
           min="0" 
           max="100" 
-          color="warning">
+          color="warning"
+          fill="outline">
         </ion-input>
         
         <div *ngIf="!isEditing">
@@ -44,6 +48,8 @@
             <ion-icon name="create-outline"></ion-icon>
           </ion-button>
         </div>
+        </div>
+
         <div *ngIf="isEditing" class="editar-configuracion">
           <ion-button class="custom-button-1" (click)="saveConfig()">
             Guardar
@@ -53,30 +59,20 @@
           </ion-button>
         </div>
       </div>
+      <p>Explicacion de la funcion de procentaje de puntos</p>
+
     </div>
     
 
     <div class="card">
       <h2>Categorias</h2>
-
-      <div class="category-item">
-        <div class="category-box">Pizzas
-          <ion-icon name="create-outline"></ion-icon>
-        </div>
-      </div>
-
-      <div class="category-item">
-        <div class="category-box">Hojaldres
+      <ion-spinner *ngIf="!categorias" color="warning"></ion-spinner>
+      <div class="category-item" *ngFor="let categoria of categorias">
+        <div class="category-box">{{categoria.categoria_Nombre}}
           <ion-button class="edit-button" >
             <ion-icon name="create-outline"></ion-icon>
           </ion-button>
         </div>
-      </div>
-
-      <div class="category-item">
-        <div class="category-box"><p>Aguas</p>          
-          <ion-icon name="create-outline"></ion-icon>
-      </div>
       </div>
     </div>
   </div>

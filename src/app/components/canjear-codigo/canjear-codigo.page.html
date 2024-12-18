@@ -3,7 +3,7 @@
     <!-- Sección del escáner QR -->
     <div class="qr-scanner">
       <div class="scanner-box">
-        <p>ESCANEAR CÓDIGO PROMOCIONAL</p>
+        <h3>Escanear código promocional</h3>
         <!-- Área de escaneo -->
         <div class="scanner-area">
           <!-- Escáner QR cuando se activa -->
@@ -19,7 +19,7 @@
         </div>
 
         <!-- Botón para escanear QR -->
-        <ion-button class="custom-button-1" (click)="scanQR()" expand="block" >
+        <ion-button class="custom-button-1" (click)="scanQR()"  >
           <ion-icon slot="start" name="qr-code-outline"></ion-icon>
           Escanear QR
         </ion-button>
@@ -28,8 +28,7 @@
 
     <!-- Sección del resumen de la orden -->
     <div class="order-summary" >
-      <ion-card>
-        <ion-card-content>
+        <div>
           <ion-grid>
             <ion-row>
               <ion-col><strong>Producto</strong></ion-col>
@@ -46,11 +45,10 @@
             </ion-row>
           </ion-grid>
 
-          <ion-button class="custom-button-2" expand="block" (click)="canjearOrden()">
+          <ion-button class="custom-button-2" (click)="canjearOrden()">
             Canjear puntos
           </ion-button>
-        </ion-card-content>
-      </ion-card>
+        </div>
     </div>
   </div>
 </ion-content>

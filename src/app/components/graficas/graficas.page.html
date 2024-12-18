@@ -1,13 +1,59 @@
 <ion-content>
+  <div class="contenedor">
 
-  <div class="chart">
-    <h1>Grafica 1</h1>
-    <canvas id="chart">{{ chart }}</canvas>
+    <!-- Ticket Promedio -->
+    <div class="chart">
+      <h1><strong>Ticket promedio</strong></h1>
+      <label>Periodo Ticket Promedio:</label>
 
-  </div>
-  <div class="chart">
-    <h1>Grafica 2</h1>
-    <canvas id="chart2">{{ chart2 }}</canvas>
+      <!-- Selector de rango de fechas -->
+      <div class="fechas">
+        <ion-input type="date" [(ngModel)]="ticketInicio"></ion-input>
+        <ion-input type="date" [(ngModel)]="ticketFin"></ion-input>
+        <ion-button (click)="actualizarTicketPromedio()" class="custom-button-2">Actualizar</ion-button>
+      </div>
+
+      <h2>{{ ticketPromedio | currency }}</h2>
+      <p><strong>Total de Ventas:</strong> {{ totalVentas }}</p>
+      <p><strong>Total de Monto de Ventas:</strong> {{ totalMontoVentas | currency }}</p>
+    </div>
+
+    <!-- Productos Más Vendidos -->
+    <div class="chart">
+      <h1>Productos más vendidos</h1>
+      <label>Periodo Productos:</label>
+
+      <!-- Selector de rango de fechas -->
+      <div class="fechas">
+        <ion-input type="date" [(ngModel)]="productosInicio"></ion-input>
+        <ion-input type="date" [(ngModel)]="productosFin"></ion-input>
+        <ion-button (click)="actualizarProductosMasVendidos()" class="custom-button-2">Actualizar</ion-button>
+      </div>
+
+      <canvas id="chart">{{ chart }}</canvas>
+    </div>
+
+    <!-- Comparación de Ventas -->
+    <div class="chart">
+      <h1>Comparación de ventas</h1>
+      <label>Periodo Comparación 1:</label>
+
+      <!-- Selector de rango de fechas -->
+      <div class="fechas">
+        <ion-input type="date" [(ngModel)]="comparacionInicio1"></ion-input>
+        <ion-input type="date" [(ngModel)]="comparacionFin1"></ion-input>
+      </div>
+      <label>Periodo Comparación 2:</label>
+
+      <div class="fechas">
+        <ion-input type="date" [(ngModel)]="comparacionInicio2">      </ion-input>
+        <ion-input type="date" [(ngModel)]="comparacionFin2">     </ion-input>
+        <ion-button (click)="actualizarComparacionVentas()" class="custom-button-2">Actualizar</ion-button>
+      </div>
+
+
+      <canvas id="chart2">{{ chart2 }}</canvas>
+    </div>
 
   </div>
 </ion-content>

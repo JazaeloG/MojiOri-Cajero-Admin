@@ -15,30 +15,40 @@ export class ConfiguracionPage implements OnInit {
   displayedPromociones: any[] = [];
   selectedImage: File | null = null;
   isEditing: boolean = false; 
-  percentage: number | null = null; 
-  constructor( private configuracionService: ConfiguracionService, private productos: AdminProductosService,     private alertController: AlertController,
+  porcentaje_puntos: any = {};
+  categorias: any;
+    constructor( private configuracionService: ConfiguracionService, private productos: AdminProductosService,     private alertController: AlertController,
     private loadingController: LoadingController) { }
 
   ngOnInit() {
     this.getPromociones();
+    this.getConfiguracion();
     this.getPromocionesActivas();
+    this.getCategorias();
   }
 
   getPromociones(){
     this.configuracionService.getPromociones().subscribe((res: any) => {
-      console.log('promociones',res);
       this.promociones = res;
       this.displayedPromociones = this.promociones;
-
+      console.log( this.promociones)
     });
   }
   getPromocionesActivas(){
     this.configuracionService.getPromocionesActivas().subscribe((res: any) => {
-      console.log('promociones activas ',res);
       this.promocionesActivas = res;
     });
   }
-
+  getConfiguracion(){
+    this.configuracionService.getConfiguracion().subscribe((res: any) => {
+      this.porcentaje_puntos = res[0];
+    });
+  }
+  getCategorias(){
+    this.productos.getCategories().subscribe((res: any) => {
+      this.categorias = res;
+    });
+  }
   segmentChanged(event: any) {
     const selectedValue = event.detail.value;
 
@@ -53,7 +63,7 @@ export class ConfiguracionPage implements OnInit {
 
   async deletePromocion(id: number){
     const loading = await this.loadingController.create({
-      message: 'Guardando producto...',
+      message: 'Eliminando promocion...',
       spinner: 'crescent',
       cssClass: 'custom-loading' 
     });
@@ -86,7 +96,7 @@ export class ConfiguracionPage implements OnInit {
   });
 
   }
-  async alertaEliminarProducto(id: number, promocion_Titulo: string) {
+  async alertaEliminarPromocion(id: number, promocion_Titulo: string) {
     const alert = await this.alertController.create({
       header:
         '¿Desea eliminar la promoción "'  + promocion_Titulo+  '" de la lista de promociones?',
@@ -104,6 +114,21 @@ export class ConfiguracionPage implements OnInit {
           },
         },
       ],
+    });
+
+    await alert.present();
+  }
+
+  async mostrarPromocion(promocion: any) {
+    const alert = await this.alertController.create({
+      header: promocion.promocion.promocion_Titulo,
+      subHeader: promocion.promocion.promocion_Descripcion,
+      message:`Válido del ${promocion.promocionProducto_FechaInicio} al ${promocion.promocionProducto_FechaFin}`,
+      buttons: [ {
+        text: 'Cerrar',
+        role: 'cancel',
+        cssClass: 'alert-button-cancel',
+      },],
     });
 
     await alert.present();
@@ -140,13 +165,13 @@ export class ConfiguracionPage implements OnInit {
 
 // Guarda la configuración
 saveConfig() {
-  console.log('Configuración guardada:', this.percentage);
+  console.log('Configuración guardada:', this.porcentaje_puntos);
   this.isEditing = false;
 }
 
 // Cancela la edición
 cancelEdit() {
-  this.percentage = null; 
+  this.porcentaje_puntos = this.porcentaje_puntos; 
   this.isEditing = false;
 }
 }

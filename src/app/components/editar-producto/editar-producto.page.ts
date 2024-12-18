@@ -37,11 +37,7 @@ export class EditarProductoPage implements OnInit {
     | undefined;
 
   constructor(
-    private productosService: AdminProductosService,
-    private alertController: AlertController,
-    private loadingController: LoadingController,
-    private activatedRoute: ActivatedRoute,
-    private router: Router
+    private productosService: AdminProductosService, private alertController: AlertController, private loadingController: LoadingController, private activatedRoute: ActivatedRoute, private router: Router
   ) {}
 
   ngOnInit() {
@@ -150,48 +146,6 @@ export class EditarProductoPage implements OnInit {
       );
     }
   );
-  }
-
-  actualizarInputs() {
-    this.patchProducto = {
-      producto_Disponible: (
-        document.querySelector(
-          'ion-select[placeholder="si"]'
-        ) as HTMLSelectElement
-      ).value,
-      producto_Nombre: (
-        document.querySelector(
-          'ion-input[placeholder="Hojaldre"]'
-        ) as HTMLInputElement
-      ).value,
-      producto_Descripcion: (
-        document.querySelector(
-          'ion-input[placeholder="Descripción"]'
-        ) as HTMLInputElement
-      ).value,
-      producto_Precio: parseFloat(
-        (
-          document.querySelector(
-            'ion-input[placeholder="15.00"]'
-          ) as HTMLInputElement
-        ).value
-      ),
-      producto_PrecioPuntos: parseFloat(
-        (
-          document.querySelector(
-            'ion-input[placeholder="200"]'
-          ) as HTMLInputElement
-        ).value
-      ),
-      id_Categoria: Number(
-        (
-          document.querySelector(
-            'ion-select[placeholder="1"]'
-          ) as HTMLSelectElement
-        ).value
-      ),
-    };
-    console.log('patchProducto', this.patchProducto);
   }
 
   onFileSelected(event: any) {

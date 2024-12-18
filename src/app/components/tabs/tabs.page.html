@@ -1,5 +1,8 @@
 <ion-tabs>
   <ion-tab-bar slot="bottom" >
+    <ion-tab-button *ngIf="isAdmin" routerLink="/productos">
+      <ion-icon name="settings-outline"></ion-icon> Admin
+    </ion-tab-button>
     <ion-tab-button tab="ventas" color="ligth">
       <ion-icon name="bag-remove-outline"></ion-icon> Ventas
     </ion-tab-button>

@@ -22,7 +22,7 @@
             </ion-card-header>
             <ion-card-content>
               Teléfono:  {{admin.cuenta_Telefono}} 
-              <ion-button fill="clear" color="warning">Cerrar sesión</ion-button>
+              <ion-button fill="clear" color="warning" (click)="cerrarSesion()">Cerrar sesión</ion-button>
             </ion-card-content>
           </div>
         </div>
@@ -36,7 +36,7 @@
         </ion-card-header>
       
         <ion-card-content> Teléfono: {{cajero.cuenta_Telefono}} 
-          <ion-button fill="clear" color="warning" >Editar</ion-button>
+          <ion-button fill="clear" color="warning" (click)=" confirmarDelete(cajero.id_Cuenta)" >  <ion-icon name="trash-outline"></ion-icon> Eliminar</ion-button>
         </ion-card-content>
       </ion-card>
     </div>

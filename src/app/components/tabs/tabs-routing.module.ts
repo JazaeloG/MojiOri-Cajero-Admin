@@ -1,11 +1,11 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { TabsPage } from './tabs.page';
-import { authGuard } from 'src/app/guard/auth.guard';
+import { AuthGuard } from 'src/app/guard/auth.guard';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'cajero',
     component: TabsPage,
     children: [
       {
@@ -16,12 +16,12 @@ const routes: Routes = [
       {
         path: 'ventas',
         loadChildren: () => import('../ventas/ventas.module').then(m => m.VentasPageModule),
-        canActivate: [authGuard]
+        canActivate: [AuthGuard]
       },
       {
         path: 'canjear-codigo',
         loadChildren: () => import('../canjear-codigo/canjear-codigo.module').then(m => m.CanjearCodigoPageModule),
-        canActivate: [authGuard]
+        canActivate: [AuthGuard]
       }
     ]
   }

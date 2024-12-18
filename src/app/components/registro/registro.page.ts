@@ -43,7 +43,6 @@ export class RegistroPage implements OnInit {
        this.datosUsuario = {
         ...this.registroForm.value,
         cuenta_Estado: "PENDIENTE",
-        usuario_FechaNacimiento: this.formattedDate
       };
      this.registroService.registrarUsuario(this.datosUsuario).subscribe(
         async response => {
@@ -74,25 +73,8 @@ export class RegistroPage implements OnInit {
    }
   }
 
-  toggleDateTime() {
-    this.showDateTime = !this.showDateTime;
-  }
 
-  onDateChange(event: any) {
-    this.selectedDate = event.detail.value;
-    this.formattedDate = this.formatDate(this.selectedDate);
-    this.registroForm.get('usuario_FechaNacimiento')?.setValue(this.formattedDate);
-    this.toggleDateTime();
-  }
 
-  formatDate(dateString: string): string {
-    if (!dateString) return '';
-    const date = new Date(dateString);
-    const day = date.getDate().toString().padStart(2, '0');
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
-  }
   private async presentAlert(
     header: string,
     message: string,

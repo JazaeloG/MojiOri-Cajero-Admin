@@ -21,12 +21,18 @@ export class ConfiguracionService {
   getPromocionesActivas() {
     return this.http.get(`${this.url}promociones/obtenerActivas`);
   }
+  getPromocionId(id: number) {
+    return this.http.get(`${this.url}promociones/obtenerPorID/${id}`);
+  }
   deletePromocion(id: number): Observable<any> {
     return this.http.delete(`${this.url}promociones/${id}`);
   }
 
   postConfiguracion(){
     
+  }
+  getConfiguracion(){
+    return this.http.get(`${this.url}configuracion`);
   }
 }
 

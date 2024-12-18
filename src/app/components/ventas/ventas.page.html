@@ -2,6 +2,14 @@
   <div class="food-order-container">
     <div class="menu-section">
       <div class="top-section">
+        <div *ngIf="isScanning" class="qr-scanner-box">
+          <zxing-scanner
+            [formats]="[BarcodeFormat.QR_CODE]"
+            (scanSuccess)="onScanSuccess($event)"
+            [device]="currentDevice || undefined"
+            [enable]="scannerEnabled">
+          </zxing-scanner>
+        </div>
         <div class="number-input">
           <ion-input
             placeholder="Ingrese número de 10 dígitos"
@@ -10,25 +18,22 @@
             type="tel"
             [(ngModel)]="inputNumber"
             class="custom-input"
+            fill="outline"
           ></ion-input>
           <ion-button (click)="scanQR()" class="custom-button-1">
             <ion-icon name="qr-code-outline"></ion-icon>
             Escanear QR
           </ion-button>
         </div>
-      </div>
 
      
-      <div *ngIf="isScanning" class="qr-scanner-box">
-        <zxing-scanner
-          [formats]="[BarcodeFormat.QR_CODE]"
-          (scanSuccess)="onScanSuccess($event)"
-          [device]="currentDevice || undefined"
-          [enable]="scannerEnabled">
-        </zxing-scanner>
-      </div>
+
+    </div>
+
       <div class="products-container">
-        <div class="products-grid" style="overflow-y: auto; max-height: 400px;">
+
+        
+        <div class="products-grid" style="overflow-y: auto; max-height: 440px;">
           <div class="product-item" *ngFor="let product of products">
             <div class="product-image" [style.background-image]="'url(' + product.image + ')'" ></div>
             <p class="product-name">{{ product.name }}</p>
@@ -40,14 +45,14 @@
 
             <div *ngIf="isProductInOrder(product)" class="order-item-controls">
               
-              <ion-button (click)="decreaseQuantity(product)" fill="clear" color="danger">
+              <ion-button (click)="decreaseQuantity(product)" fill="clear" color="danger" class="icon">
                 <ion-icon name="remove-circle-outline"></ion-icon>
               </ion-button>
               <span>{{ getProductQuantity(product) }}</span>
-              <ion-button (click)="increaseQuantity(product)" fill="clear" color="success">
+              <ion-button (click)="increaseQuantity(product)" fill="clear" color="success" class="icon">
                 <ion-icon name="add-circle-outline"></ion-icon>
               </ion-button>
-              <ion-button (click)="removeFromOrder(product)" fill="clear" color="danger">
+              <ion-button (click)="removeFromOrder(product)" fill="clear" color="danger" class="icon">
                 <ion-icon name="trash-outline"></ion-icon>
               </ion-button>
             </div>
