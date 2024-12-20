@@ -41,7 +41,8 @@ export class ConfiguracionPage implements OnInit {
   }
   getConfiguracion(){
     this.configuracionService.getConfiguracion().subscribe((res: any) => {
-      this.porcentaje_puntos = res[0];
+      this.porcentaje_puntos = res[res.length - 1];
+      console.log(this.porcentaje_puntos);
     });
   }
   getCategorias(){
@@ -162,16 +163,54 @@ export class ConfiguracionPage implements OnInit {
  startEditing() {
   this.isEditing = true;
 }
+async saveConfig() {
+  const loading = await this.loadingController.create({
+    message: 'Guardando configuración...',
+    spinner: 'crescent',
+    cssClass: 'custom-loading',
+  });
 
-// Guarda la configuración
-saveConfig() {
-  console.log('Configuración guardada:', this.porcentaje_puntos);
-  this.isEditing = false;
+  await loading.present();
+
+  const configuracionBody = {
+    configuracion_Clave: 'puntos_porcentaje',
+    configuracion_Valor: this.porcentaje_puntos.configuracion_Valor.toString(),
+    configuracion_Descripcion: 'Porcentaje de puntos para promociones',
+  };
+
+  console.log('Enviando datos al backend:',  this.porcentaje_puntos.valor);
+
+  this.configuracionService.postConfiguracion(configuracionBody).subscribe(
+    async (res: any) => {
+      console.log('Respuesta del servidor:', res);
+      await loading.dismiss();
+      this.presentAlert(
+        'Guardado',
+        'La configuración se ha guardado correctamente.',
+        'OK',
+        () => {
+          this.isEditing = false;
+        }
+      );
+    },
+    async (error) => {
+      console.error('Error al guardar la configuración:', error);
+      await loading.dismiss();
+      this.presentAlert(
+        'Error',
+        'No se pudo guardar la configuración. Intente nuevamente.',
+        'OK',
+        () => {}
+      );
+    }
+  );
 }
 
-// Cancela la edición
+
 cancelEdit() {
-  this.porcentaje_puntos = this.porcentaje_puntos; 
-  this.isEditing = false;
+  this.getConfiguracion(); // Recarga la configuración original
+  this.isEditing = false; // Finaliza el modo de edición
 }
+
+
 }

@@ -2,6 +2,7 @@
   <div class="content-container">
     <h1 class="title">Editar producto</h1>
     <div class="contenedor">
+      <!-- Selector de Categoría -->
       <div class="select">
         <ion-select
           color="warning"
@@ -10,11 +11,11 @@
           interface="popover"
           fill="outline"
           label="Categoria"
-          [value]="producto?.id_Categoria"
+          [(ngModel)]="producto.id_Categoria"
         >
           <ion-select-option
-            [value]="categoria.id_Categoria"
             *ngFor="let categoria of categorias"
+            [value]="categoria.id_Categoria"
             >{{ categoria.categoria_Nombre }}</ion-select-option
           >
         </ion-select>
@@ -26,6 +27,7 @@
         </ion-button>
       </div>
 
+      <!-- Selector de Disponibilidad -->
       <ion-select
         color="warning"
         class="input-container"
@@ -33,12 +35,13 @@
         interface="popover"
         fill="outline"
         label="Disponible"
-        [value]="producto?.producto_Nombre"
-        >
-        <ion-select-option value="true">Sí</ion-select-option>
-        <ion-select-option value="false">No</ion-select-option>
+        [(ngModel)]="producto.producto_Disponible"
+      >
+        <ion-select-option [value]="true">Sí</ion-select-option>
+        <ion-select-option [value]="false">No</ion-select-option>
       </ion-select>
 
+      <!-- Input de Nombre -->
       <ion-input
         color="warning"
         class="input-container"
@@ -46,9 +49,10 @@
         label-placement="floating"
         fill="outline"
         placeholder="Hojaldre"
-        [value]="producto?.producto_Nombre"
+        [(ngModel)]="producto.producto_Nombre"
       ></ion-input>
 
+      <!-- Input de Descripción -->
       <ion-input
         color="warning"
         class="input-container"
@@ -56,9 +60,10 @@
         label-placement="floating"
         fill="outline"
         placeholder="Descripción"
-        [value]="producto?.producto_Descripcion"
+        [(ngModel)]="producto.producto_Descripcion"
       ></ion-input>
 
+      <!-- Input de Precio -->
       <ion-input
         color="warning"
         class="input-container"
@@ -66,9 +71,11 @@
         label-placement="floating"
         fill="outline"
         placeholder="15.00"
-        [value]="producto?.producto_Precio"
+        [(ngModel)]="producto.producto_Precio"
+        type="number"
       ></ion-input>
 
+      <!-- Input de Precio Puntos -->
       <ion-input
         color="warning"
         class="input-container"
@@ -76,9 +83,11 @@
         label-placement="floating"
         fill="outline"
         placeholder="200"
-        [value]="producto?.producto_PrecioPuntos"
+        [(ngModel)]="producto.producto_PrecioPuntos"
+        type="number"
       ></ion-input>
 
+      <!-- Carga de Imagen -->
       <div class="image-upload-container">
         <img
           [src]="producto?.imagenes?.imagenProducto_Url"
@@ -97,17 +106,12 @@
         </ion-button>
       </div>
 
+      <!-- Botones de Guardar y Eliminar -->
       <div class="guardar">
-        <ion-button
-          class="custom-button-1"
-          (click)="actualizarProducto()"
-        >
+        <ion-button class="custom-button-1" (click)="actualizarProducto()">
           Guardar
         </ion-button>
-        <ion-button
-          class="custom-button-4"
-          (click)="alertaEliminarProducto()"
-        >
+        <ion-button class="custom-button-4" (click)="alertaEliminarProducto()">
           <ion-icon name="trash-outline"></ion-icon> Eliminar
         </ion-button>
       </div>

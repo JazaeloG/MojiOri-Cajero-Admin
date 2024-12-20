@@ -33,7 +33,7 @@
         <div class="configuracion">
           <ion-input 
           [disabled]="!isEditing" 
-          [(ngModel)]="porcentaje_puntos.configuracion_Clave" 
+          [(ngModel)]="porcentaje_puntos.configuracion_Valor" 
           type="number" 
           label="Porcentaje de puntos:" 
           placeholder="%" 
@@ -69,9 +69,7 @@
       <ion-spinner *ngIf="!categorias" color="warning"></ion-spinner>
       <div class="category-item" *ngFor="let categoria of categorias">
         <div class="category-box">{{categoria.categoria_Nombre}}
-          <ion-button class="edit-button" >
-            <ion-icon name="create-outline"></ion-icon>
-          </ion-button>
+        
         </div>
       </div>
     </div>

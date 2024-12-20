@@ -28,9 +28,10 @@ export class ConfiguracionService {
     return this.http.delete(`${this.url}promociones/${id}`);
   }
 
-  postConfiguracion(){
-    
+  postConfiguracion(config: any) {
+    return this.http.post(`${this.url}configuracion`, config);
   }
+  
   getConfiguracion(){
     return this.http.get(`${this.url}configuracion`);
   }

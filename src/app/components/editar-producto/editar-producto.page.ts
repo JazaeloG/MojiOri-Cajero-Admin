@@ -25,8 +25,17 @@ export class EditarProductoPage implements OnInit {
         imagenes: {
           imagenProducto_Url: string;
         };
-      }
-    | undefined;
+      }= {
+        id_Categoria: 0,
+        producto_Disponible: true,
+        producto_Nombre: '',
+        producto_Descripcion: '',
+        producto_Precio: 0,
+        producto_PrecioPuntos: 0,
+        imagenes: { imagenProducto_Url: '' },
+        categoria_Nombre: '',
+      };
+    
   patchProducto: any;
   archivo:
     | {
