@@ -67,7 +67,7 @@ export class LoginPage implements OnInit {
       if (response.success) {
         this.loginService.getProfile().subscribe(async profile => {
           if (profile) {
-            this.router.navigate(['/ventas']);
+            this.router.navigate(['/cajero/ventas']);
           } else {
             await this.presentToast('No se pudo verificar el perfil. Inténtalo de nuevo.');
           }

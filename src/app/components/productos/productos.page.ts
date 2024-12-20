@@ -17,7 +17,7 @@ export class ProductosPage implements OnInit {
         id: producto.id_Producto,
         nombre: producto.producto_Nombre,
         precio: producto.producto_Precio,
-        img : 'http://desarrollo.mojiorizaba.com:3000/' + producto.imagenes[producto.imagenes.length - 1]?.imagenProducto_Url || 'https://via.placeholder.com/147x139'
+        img : 'https://mojiorizaba.com/' + producto.imagenes[producto.imagenes.length - 1]?.imagenProducto_Url || 'https://via.placeholder.com/147x139'
       }));
     });
   }

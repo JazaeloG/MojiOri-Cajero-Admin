@@ -8,9 +8,9 @@
     </div>
 
   <div class="form">
-    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" action="/ventas" name="loginForm" id="loginForm">
+    <form [formGroup]="loginForm" (ngSubmit)="onLogin()" action="/cajero/ventas" name="loginForm" id="loginForm">
       <ion-item>
-        <ion-input label="Teléfono" color="medium" label-placement="floating"  type="tel" formControlName="cuenta_Telefono" length="10" id="cuenta_Telefono" required></ion-input>
+        <ion-input label="Teléfono" color="medium" label-placement="floating"  type="tel" formControlName="cuenta_Telefono" maxlength="10" id="cuenta_Telefono" required></ion-input>
 
       </ion-item>
 
@@ -24,8 +24,6 @@
         INICIO DE SESIÓN
       </ion-button>
     </form>
-    
-    <a href="recuperacion" class="recuperar">¿Olvidé la contraseña?</a>
-    </div>
+        </div>
   </div>
 </ion-content>

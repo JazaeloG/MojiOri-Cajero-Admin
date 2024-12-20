@@ -45,7 +45,7 @@ export class VentasPage implements OnInit {
           id: product.id_Producto,
           name: product.producto_Nombre,
           price: parseFloat(product.producto_Precio),
-          image: `http://desarrollo.mojiorizaba.com:3000/${product.imagenes[product.imagenes.length-1]?.imagenProducto_Url}`
+          image: `https://mojiorizaba.com/${product.imagenes[product.imagenes.length-1]?.imagenProducto_Url}`
         }));
       },
       (error) => {

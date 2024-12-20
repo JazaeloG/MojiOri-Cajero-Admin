@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  baseApiURL:'http://desarrollo.mojiorizaba.com:3000/api/v1/',
+  baseApiURL:'https://mojiorizaba.com/api/v1/',
 };
 
 /*

@@ -61,7 +61,7 @@ export class EditarProductoPage implements OnInit {
             producto_PrecioPuntos: data.producto_PrecioPuntos,
             imagenes: {
               imagenProducto_Url:
-                'http://desarrollo.mojiorizaba.com:3000/' +
+                'https://mojiorizaba.com/' +
                   data.imagenes[data.imagenes.length - 1]?.imagenProducto_Url ||
                 'https://via.placeholder.com/147x139',
             },
