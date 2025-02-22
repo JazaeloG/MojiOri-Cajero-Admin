@@ -1,21 +1,59 @@
 <ion-content>
   <div class="contenedor">
-
+        <!--Rango de dechas -->
+        <div class="periodo">
+          <div class="header">
+            <h2>Periodo</h2>
+            <ion-segment color="medium" (ionChange)="onSegmentChanged($event)" value="dia">
+              <ion-segment-button value="dia">
+                <ion-label>Día</ion-label>
+              </ion-segment-button>
+              <ion-segment-button value="mes">
+                <ion-label>Mes</ion-label>
+              </ion-segment-button>
+              <ion-segment-button value="año">
+                <ion-label>Año</ion-label>
+              </ion-segment-button>
+            </ion-segment>
+          </div>
+        
+          <div class="selectorfecha">
+            <!-- Selector para Día -->
+            <ng-container *ngIf="selectedSegment === 'dia'">
+              <ion-input label-placement="floating" label="Fecha Inicio" type="date" [(ngModel)]="fechaInicio"></ion-input>
+              <ion-input label-placement="floating" label="Fecha Fin" type="date" [(ngModel)]="fechaFin"></ion-input>
+            </ng-container>
+        
+            <!-- Selector para Mes -->
+            <ng-container *ngIf="selectedSegment === 'mes'">
+              <ion-select label="Selecciona un mes" [(ngModel)]="selectedMonth" (ionChange)="onMonthChange($event)">
+                <ion-select-option *ngFor="let month of months" [value]="month.value">{{ month.name }}</ion-select-option>
+              </ion-select>
+            </ng-container>
+        
+            <!-- Selector para Año -->
+            <ng-container *ngIf="selectedSegment === 'año'">
+              <ion-select label="Selecciona un año" [(ngModel)]="selectedYear" (ionChange)="onYearChange($event)">
+                <ion-select-option *ngFor="let year of availableYears" [value]="year">{{ year }}</ion-select-option>
+              </ion-select>
+            </ng-container>
+        
+            <ion-button (click)="actualizarGraficas()" class="custom-button-2">Actualizar</ion-button>
+          </div>
+        </div>
+        
     <!-- Ticket Promedio -->
     <div class="chart">
       <h1><strong>Ticket promedio</strong></h1>
       <label>Periodo Ticket Promedio:</label>
 
-      <!-- Selector de rango de fechas -->
-      <div class="fechas">
-        <ion-input type="date" [(ngModel)]="ticketInicio"></ion-input>
-        <ion-input type="date" [(ngModel)]="ticketFin"></ion-input>
-        <ion-button (click)="actualizarTicketPromedio()" class="custom-button-2">Actualizar</ion-button>
+      <div *ngIf="mensajeError" class="error">
+        <ion-icon name="alert-circle-outline" color="danger"></ion-icon>     
+        <label> {{mensajeError}}</label> 
       </div>
-
-      <h2>{{ ticketPromedio | currency }}</h2>
-      <p><strong>Total de Ventas:</strong> {{ totalVentas }}</p>
-      <p><strong>Total de Monto de Ventas:</strong> {{ totalMontoVentas | currency }}</p>
+      <h2  *ngIf="!mensajeError" >{{ ticketPromedio | currency }}</h2>
+      <p *ngIf="!mensajeError"><strong>Total de Ventas:</strong> {{ totalVentas }}</p>
+      <p *ngIf="!mensajeError"><strong>Total de Monto de Ventas:</strong> {{ totalMontoVentas | currency }}</p>
     </div>
 
     <!-- Productos Más Vendidos -->
@@ -23,14 +61,12 @@
       <h1>Productos más vendidos</h1>
       <label>Periodo Productos:</label>
 
-      <!-- Selector de rango de fechas -->
-      <div class="fechas">
-        <ion-input type="date" [(ngModel)]="productosInicio"></ion-input>
-        <ion-input type="date" [(ngModel)]="productosFin"></ion-input>
-        <ion-button (click)="actualizarProductosMasVendidos()" class="custom-button-2">Actualizar</ion-button>
+      <div *ngIf="mensajeError" class="error">
+        <ion-icon name="alert-circle-outline" color="danger"></ion-icon>     
+        <label> {{mensajeError}}</label> 
       </div>
 
-      <canvas id="chart">{{ chart }}</canvas>
+      <canvas *ngIf="!mensajeError" id="chart">{{ chart }}</canvas>
     </div>
 
     <!-- Comparación de Ventas -->
@@ -40,19 +76,22 @@
 
       <!-- Selector de rango de fechas -->
       <div class="fechas">
-        <ion-input type="date" [(ngModel)]="comparacionInicio1"></ion-input>
-        <ion-input type="date" [(ngModel)]="comparacionFin1"></ion-input>
+        <ion-input  label-placement="floating"  label="Fecha inicio" type="date" [(ngModel)]="fechaInicio"></ion-input>
+        <ion-input  label-placement="floating"  label="Fecha fin" type="date" [(ngModel)]="fechaFin"></ion-input>
       </div>
       <label>Periodo Comparación 2:</label>
 
       <div class="fechas">
-        <ion-input type="date" [(ngModel)]="comparacionInicio2">      </ion-input>
-        <ion-input type="date" [(ngModel)]="comparacionFin2">     </ion-input>
+        <ion-input  label-placement="floating"  label="Fecha inicio" type="date" [(ngModel)]="fechaInicioPrevio">      </ion-input>
+        <ion-input  label-placement="floating"  label="Fecha fin" type="date" [(ngModel)]="fechaFinPrevio">     </ion-input>
         <ion-button (click)="actualizarComparacionVentas()" class="custom-button-2">Actualizar</ion-button>
       </div>
 
-
-      <canvas id="chart2">{{ chart2 }}</canvas>
+      <div *ngIf="mensajeError" class="error">
+        <ion-icon name="alert-circle-outline" color="danger"></ion-icon>     
+        <label> {{mensajeError}}</label> 
+      </div>
+      <canvas *ngIf="!mensajeError" id="chart2">{{ chart2 }}</canvas>
     </div>
 
   </div>

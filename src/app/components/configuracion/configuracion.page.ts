@@ -25,6 +25,7 @@ export class ConfiguracionPage implements OnInit {
     this.getConfiguracion();
     this.getPromocionesActivas();
     this.getCategorias();
+    console.log('token',localStorage.getItem('authToken'));
   }
 
   getPromociones(){
@@ -42,7 +43,8 @@ export class ConfiguracionPage implements OnInit {
   getConfiguracion(){
     this.configuracionService.getConfiguracion().subscribe((res: any) => {
       this.porcentaje_puntos = res[res.length - 1];
-      console.log(this.porcentaje_puntos);
+      console. log(res);
+      console.log('puntoos',this.porcentaje_puntos);
     });
   }
   getCategorias(){

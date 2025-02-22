@@ -38,11 +38,18 @@
     p {
       font-size: 1rem;
     }
-    .fechas{
+  
+    .selectorfecha, .fechas, .header{
       flex-direction: column;
+    }
+    ion-segment {
+      height: 50px;
+      width: 100%;
+      font-size: 15px;
     }
   }
   
+
   .fechas{
     display: flex;
     justify-content: space-between;
@@ -51,4 +58,30 @@
   }
   label{
     color: rgb(98, 98, 98);
+  }
+  .selectorfecha{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;  }
+
+  .header{
+    display: flex;
+    justify-content: space-between;
+  }
+  .periodo{
+    background-color: #ffffff;
+    border-radius: 15px;
+    width: 96%;
+    margin: 15px auto 0px;
+    padding: 25px;
+  }
+  ion-segment {
+    height: 50px;
+    width: 80%;
+    font-size: 15px;
+  }
+  ion-segment-button {
+
+    text-transform: capitalize;
+    --padding: 0;
   }

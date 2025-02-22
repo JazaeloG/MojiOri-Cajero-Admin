@@ -11,55 +11,169 @@ export class GraficasPage implements OnInit {
 
   public chart: Chart | undefined;  // Gráfica de productos más vendidos
   public chart2: Chart | undefined; // Gráfica de comparación de ventas
-  public mesSeleccionado: string = '2024-12'; // Mes inicial seleccionado (formato 'YYYY-MM')
-
-  public ticketInicio: string = '2024-12-01';
-  public ticketFin: string = '2024-12-31';
-
-  public productosInicio: string = '2024-12-01';
-  public productosFin: string = '2024-12-31';
-
-  public comparacionInicio1: string = '2024-12-01';
-  public comparacionFin1: string = '2024-12-31';
-  public comparacionInicio2: string = '2024-11-01';
-  public comparacionFin2: string = '2024-11-30';
 
   // Datos para ticket promedio
   public totalVentas: number | null = null;
   public totalMontoVentas: number | null = null;
   public ticketPromedio: number | null = null;
-  constructor(private ventasService: EstadisticasService) {}
+  public mensajeError: string | null = null;
+  public startOfMonth: string;
+  public startOfYear: string;
+  public today: string;
+
+  public selectedSegment: string = 'todas';
+  public fechaInicio: string;
+  public fechaFin: string;
+  public fechaInicioPrevio: string = '';
+  public fechaFinPrevio: string = '';
+
+  diaAnterior: string = '';
+  mesAnterior!: string;
+  añoAnterior!: string;
+
+  selectedMonth: number;
+  selectedYear: number;
+  months = [
+    { name: 'Enero', value: 0 },
+    { name: 'Febrero', value: 1 },
+    { name: 'Marzo', value: 2 },
+    { name: 'Abril', value: 3 },
+    { name: 'Mayo', value: 4 },
+    { name: 'Junio', value: 5 },
+    { name: 'Julio', value: 6 },
+    { name: 'Agosto', value: 7 },
+    { name: 'Septiembre', value: 8 },
+    { name: 'Octubre', value: 9 },
+    { name: 'Noviembre', value: 10 },
+    { name: 'Diciembre', value: 11 }
+  ];
+
+  availableYears: number[] = [];
+
+  constructor(private ventasService: EstadisticasService) {
+    const now = new Date();
+    now.setHours(0, 0, 0, 0);
+    this.today = now.toISOString().split('T')[0];
+
+    this.startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1).toISOString().split('T')[0];
+    this.startOfYear = new Date(now.getFullYear(), 0, 1).toISOString().split('T')[0];
+
+    this.fechaInicio = this.today;
+    this.fechaFin = this.today;
+
+    this.selectedMonth = now.getMonth();
+    this.selectedYear = now.getFullYear();
+
+    for (let i = this.selectedYear - 10; i <= this.selectedYear; i++) {
+      this.availableYears.push(i);
+    }
+  }
+
+  private formatDate(date: Date): string {
+    return date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
+  }
+
+  getPreviousDate(dateString: string): string {
+    const date = new Date(dateString);
+    date.setDate(date.getDate() - 1);
+    return this.formatDate(date);
+  }
+
+  getPreviousMonth(dateString: string): string {
+    const date = new Date(dateString);
+    date.setMonth(date.getMonth() - 1);
+    return this.formatDate(date);
+  }
+
+  getPreviousYear(dateString: string): string {
+    const date = new Date(dateString);
+    date.setFullYear(date.getFullYear() - 1);
+    return this.formatDate(date);
+  }
+
+  onSegmentChanged(event: any) {
+    this.selectedSegment = event.detail.value;
+    
+    switch (this.selectedSegment) {
+      case 'dia':
+        this.fechaInicio = this.today;
+        this.fechaFin = this.today;
+        this.fechaInicioPrevio = this.getPreviousDate(this.today);
+        this.fechaFinPrevio = this.fechaInicioPrevio;
+        break;
+      case 'mes':
+        this.onMonthChange({ detail: { value: this.selectedMonth } });
+        break;
+      case 'año':
+        this.onYearChange({ detail: { value: this.selectedYear } });
+        break;
+    }
+    
+    this.actualizarGraficas();
+  }
+
+  onMonthChange(event: any) {
+    this.selectedMonth = event.detail.value;
+    const year = this.selectedYear;
+    
+    this.fechaInicio = new Date(year, this.selectedMonth, 1).toISOString().split('T')[0];
+    this.fechaFin = new Date(year, this.selectedMonth + 1, 0).toISOString().split('T')[0];
+    
+    const prevMonth = new Date(year, this.selectedMonth - 1, 1);
+    this.fechaInicioPrevio = this.formatDate(prevMonth);
+    this.fechaFinPrevio = new Date(prevMonth.getFullYear(), prevMonth.getMonth() + 1, 0).toISOString().split('T')[0];
+    
+    this.actualizarGraficas();
+  }
+
+  onYearChange(event: any) {
+    this.selectedYear = event.detail.value;
+    
+    this.fechaInicio = new Date(this.selectedYear, 0, 1).toISOString().split('T')[0];
+    this.fechaFin = new Date(this.selectedYear, 11, 31).toISOString().split('T')[0];
+    
+    const prevYear = new Date(this.selectedYear - 1, 0, 1);
+    this.fechaInicioPrevio = this.formatDate(prevYear);
+    this.fechaFinPrevio = new Date(prevYear.getFullYear(), 11, 31).toISOString().split('T')[0];
+    
+    this.actualizarGraficas();
+  }
+
 
   ngOnInit(): void {
     this.actualizarGraficas();
   }
 
 
-  // Método para actualizar las gráficas según las fechas seleccionadas
   actualizarGraficas() {
+    console.log("Actualizando gráficas con fechas:", this.fechaInicio, this.fechaFin, this.fechaInicioPrevio, this.fechaFinPrevio);
+
     this.actualizarTicketPromedio();
     this.actualizarProductosMasVendidos();
     this.actualizarComparacionVentas();
   }
   actualizarTicketPromedio() {
-    this.ventasService.getTicketPromedio(this.ticketInicio, this.ticketFin).subscribe({
+    this.ventasService.getTicketPromedio(this.fechaInicio, this.fechaFin).subscribe({
       next: (data: any) => {
         if (data) {
           this.totalVentas = data.totalVentas;
           this.totalMontoVentas = data.totalMontoVentas;
           this.ticketPromedio = data.ticketPromedio;
+          this.mensajeError = null;
         } else {
           console.error('No se recibieron los datos completos para ticket promedio');
+          this.mensajeError = 'No hay datos disponibles para el periodo seleccionado';
         }
       },
       error: (err) => {
         console.error('Error al obtener los datos de ticket promedio:', err);
+        this.mensajeError = 'No hay datos disponibles para el periodo seleccionado';
+
       },
     });
   }
-    // Actualiza los datos de Productos Más Vendidos
     actualizarProductosMasVendidos() {
-      this.cargarProductosMasVendidos(this.productosInicio, this.productosFin);
+      this.cargarProductosMasVendidos(this.fechaInicio, this.fechaFin);
     }
 
   // Método para cargar los productos más vendidos
@@ -70,8 +184,10 @@ export class GraficasPage implements OnInit {
         const labels = data.map(item => item.nombre_Producto);
         const valores = data.map(item => item.cantidad_Vendida);
         this.crearGraficaProductosMasVendidos(labels, valores);
+        this.mensajeError = null;
       },
       error: (err) => {
+        this.mensajeError = 'No hay datos disponibles para el periodo seleccionado';
         console.error('Error al obtener los datos de productos más vendidos:', err);
       },
     });
@@ -120,7 +236,7 @@ export class GraficasPage implements OnInit {
   }
 
   actualizarComparacionVentas() {
-    this.cargarComparacionVentas(this.comparacionInicio1, this.comparacionFin1, this.comparacionInicio2, this.comparacionFin2);
+    this.cargarComparacionVentas(this.fechaInicio, this.fechaFin, this.fechaInicioPrevio, this.fechaFinPrevio);
   }
   // Método para cargar la comparación de ventas entre dos periodos
   cargarComparacionVentas(fechaInicioPeriodo1: string, fechaFinPeriodo1: string, fechaInicioPeriodo2: string, fechaFinPeriodo2: string) {
@@ -179,6 +295,4 @@ export class GraficasPage implements OnInit {
       },
     });
   }
-
-
 }
