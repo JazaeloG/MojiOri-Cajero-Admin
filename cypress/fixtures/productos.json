@@ -1,0 +1,22 @@
+[
+  {
+    "id_Producto": 1,
+    "producto_Nombre": "Café Moji",
+    "producto_Precio": "35.50",
+    "imagenes": [
+      {
+        "imagenProducto_Url": "assets/cafe.jpg"
+      }
+    ]
+  },
+  {
+    "id_Producto": 2,
+    "producto_Nombre": "Té Verde",
+    "producto_Precio": "28.00",
+    "imagenes": [
+      {
+        "imagenProducto_Url": "assets/te.jpg"
+      }
+    ]
+  }
+]

@@ -1,0 +1,68 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam classStyle rectangle
+
+class ConfiguracionPage {
+  -promociones: any
+  -promocionesActivas: any
+  -displayedPromociones: any[]
+  -selectedImage: File
+  -isEditing: boolean
+  -porcentaje_puntos: any
+  -categorias: any
+
+  +ngOnInit(): void
+  +getPromociones(): void
+  +getPromocionesActivas(): void
+  +getConfiguracion(): void
+  +getCategorias(): void
+  +segmentChanged(event: any): void
+  +deletePromocion(id: number): Promise<void>
+  +alertaEliminarPromocion(id: number, promocion_Titulo: string): Promise<void>
+  +mostrarPromocion(promocion: any): Promise<void>
+  +presentAlert(header: string, message: string, buttonText: string, handler: () => void): Promise<void>
+  +startEditing(): void
+  +saveConfig(): Promise<void>
+  +cancelEdit(): void
+}
+
+class ConfiguracionService {
+  -url: string
+
+  +postPromociones(formData: FormData): Observable<any>
+  +getPromociones(): Observable<any>
+  +getPromocionesActivas(): Observable<any>
+  +getPromocionId(id: number): Observable<any>
+  +deletePromocion(id: number): Observable<any>
+  +postConfiguracion(config: any): Observable<any>
+  +getConfiguracion(): Observable<any>
+}
+
+class AdminProductosService
+
+class AlertController {
+  +create(options: any): Promise<Alert>
+}
+
+class Alert {
+  +present(): Promise<void>
+}
+
+class LoadingController {
+  +create(options: any): Promise<Loading>
+}
+
+class Loading {
+  +present(): Promise<void>
+  +dismiss(): Promise<void>
+}
+
+ConfiguracionPage --> ConfiguracionService : uses
+ConfiguracionPage --> AdminProductosService : uses
+ConfiguracionPage --> AlertController : uses
+ConfiguracionPage --> LoadingController : uses
+AlertController --> Alert : returns
+LoadingController --> Loading : returns
+
+@enduml

@@ -1,0 +1,92 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam classStyle rectangle
+
+' --- Clases auxiliares ---
+class Product {
+  +id: number
+  +name: string
+  +price: number
+  +image: string
+}
+
+class OrderItem {
+  +id: number
+  +name: string
+  +price: number
+  +image: string
+  +quantity: number
+}
+
+class ProductDTO {
+  +id_Producto: number
+  +producto_Nombre: string
+  +producto_Precio: string
+  +imagenes: ImagenProducto[]
+}
+
+class ImagenProducto {
+  +imagenProducto_Url: string
+}
+
+' --- Clase de página ---
+class VentasPage {
+  -currentDevice: MediaDeviceInfo
+  -scannerEnabled: boolean
+  -BarcodeFormat
+  -isVertical: boolean
+  -isScanning: boolean
+  -inputNumber: string
+  -products: Product[]
+  -orderItems: OrderItem[]
+  -totalAmount: number
+
+  +ngOnInit(): void
+  +loadProducts(): void
+  +onResize(): void
+  +scanQR(): void
+  +onScanSuccess(scanResult: string): void
+  +addToOrder(product: Product): void
+  +increaseQuantity(product: Product): void
+  +decreaseQuantity(product: Product): void
+  +removeFromOrder(product: Product): void
+  +getProductQuantity(product: Product): number
+  +isProductInOrder(product: Product): boolean
+  +calculateTotal(): void
+  +presentToast(message: string, color: string): void
+  +placeOrder(): void
+  +showVentaRealizadaAlert(): void
+  +showCreateAccountDialog(): void
+  +crearCuentaGenerica(): void
+  +obtenerFechaActual(): string
+  +generarContrasena(): string
+  +generarNicknameAleatorio(): string
+}
+
+' --- Servicio de ventas ---
+class VentasService {
+  +descifrarCodigo(qrCode: string): Observable<any>
+  +obtenerProductos(): Observable<ProductDTO[]>
+  +realizarVenta(venta: any): Observable<any>
+  +crearCuentaGenerica(cuenta: any): Observable<any>
+}
+
+class AlertController
+class ToastController
+class HttpClient
+
+
+' --- Relaciones ---
+VentasPage --> Product : uses
+VentasPage --> OrderItem : uses
+VentasPage --> VentasService : uses
+VentasPage --> AlertController : uses
+VentasPage --> ToastController : uses
+
+VentasService --> HttpClient : uses
+VentasService --> Observable : returns
+VentasService --> ProductDTO : returns
+ProductDTO --> ImagenProducto : contains
+
+@enduml

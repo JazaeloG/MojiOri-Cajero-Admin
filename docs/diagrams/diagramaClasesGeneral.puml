@@ -1,0 +1,42 @@
+@startuml
+
+title Diagrama General de Clases - Proyecto Angular
+
+package "Componentes" {
+  class AppComponent {
+    +ngOnInit(): void
+  }
+
+  class GraficasPage {
+    -chart: Chart
+    -chart2: Chart
+    -totalVentas: number
+    -ticketPromedio: number
+    +ngOnInit(): void
+    +actualizarGraficas(): void
+    +actualizarTicketPromedio(): void
+    +actualizarProductosMasVendidos(): void
+    +actualizarComparacionVentas(): void
+  }
+}
+
+package "Servicios" {
+  class EstadisticasService {
+    +getTicketPromedio(fechaInicio: string, fechaFin: string): Observable<any>
+    +getProductosMasVendidos(fechaInicio: string, fechaFin: string, limite: number): Observable<any>
+    +getComparacionVentas(params: any): Observable<any>
+  }
+}
+
+package "Librerías" {
+  class Chart {
+    +destroy(): void
+    +update(): void
+  }
+}
+
+AppComponent --> GraficasPage : contiene
+GraficasPage --> EstadisticasService : usa
+GraficasPage --> Chart : crea instancias
+
+@enduml

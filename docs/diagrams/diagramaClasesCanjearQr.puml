@@ -1,0 +1,50 @@
+@startuml
+skinparam classAttributeIconSize 0
+skinparam classFontSize 12
+skinparam classStyle rectangle
+
+class OrderItem {
+  +id: number
+  +nombre: string
+  +cantidad: number
+}
+
+class CanjearCodigoPage {
+  -orderItems: OrderItem[]
+  -totalPoints: number
+  -isScanning: boolean
+  -scannerEnabled: boolean
+  -currentDevice: any
+  -ordenId: number
+  -BarcodeFormat
+
+  +ngOnInit(): void
+  +presentToast(message: string, color: string): void
+  +scanQR(): void
+  +onScanSuccess(scanResult: string): void
+  +obtenerOrdenPorId(ordenId: number): void
+  +mapOrderItems(detallesOrden: any[]): void
+  +canjearOrden(): void
+  +despacharOrden(ordenId: number): void
+}
+
+class CanjearCodigoService {
+  +descifrarCodigo(qrCode: string): Observable<any>
+  +obtenerOrden(ordenId: number): Observable<any>
+  +despacharOrden(ordenId: number): Observable<any>
+}
+
+class ToastController {
+  +create(options: any): Promise<Toast>
+}
+
+class Toast {
+  +present(): Promise<void>
+}
+
+CanjearCodigoPage --> OrderItem : uses
+CanjearCodigoPage --> CanjearCodigoService : uses
+CanjearCodigoPage --> ToastController : uses
+ToastController --> Toast : returns
+
+@enduml

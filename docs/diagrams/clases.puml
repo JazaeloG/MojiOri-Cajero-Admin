@@ -1,0 +1,53 @@
+@startuml
+
+class AgregarProductoPage {
+  - categorias: any
+  - file: any
+  - productoForm: FormGroup
+  + constructor(productosService: AdminProductosService, alertController: AlertController, loadingController: LoadingController, formBuilder: FormBuilder, router: Router)
+  + ngOnInit(): void
+  + guardarProducto(): void
+  + onFileSelected(event: any): void
+  + cargarCategorias(): void
+  + mostrarAlertaGuardarCategoria(): void
+  - presentAlert(header: string, message: string, buttonText: string, handler: () => void): Promise<void>
+  + guardarCategoria(nombre: string): void
+  + onDisponibleChange(value: string): void
+  + almacenarImagen(event: any): void
+}
+
+class AdminProductosService {
+  + postProduct(formData: FormData): Observable<any>
+  + getCategories(): Observable<any>
+  + postCategory(categoryData: any): Observable<any>
+}
+
+class AlertController {
+  + create(options: any): Promise<any>
+}
+
+class LoadingController {
+  + create(options: any): Promise<any>
+}
+
+class FormBuilder {
+  + group(controls: any): FormGroup
+}
+
+class Router {
+  + navigate(commands: any[]): void
+}
+
+class FormGroup {
+  + patchValue(value: any): void
+  + value: any
+}
+
+AgregarProductoPage --> AdminProductosService : uses
+AgregarProductoPage --> AlertController : uses
+AgregarProductoPage --> LoadingController : uses
+AgregarProductoPage --> FormBuilder : uses
+AgregarProductoPage --> Router : uses
+FormBuilder --> FormGroup : crea
+
+@enduml
